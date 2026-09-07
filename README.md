@@ -1,107 +1,151 @@
+This is the English `README.md` matching your exact directory structure and headless Django setup. Save this directly into the root of your repository to document the architecture and deployment steps.
 
+# Telemática Hub / Biblioteca Diftel
 
+A self-hosted, highly performant, and secure file repository designed for university students. This project separates public static file serving from an isolated, secure upload pipeline to ensure safety, speed, and maintainability.
 
-## Mermaid Diagram
+## 🚀 Architecture Overview
+
+This project uses a headless architecture where **Nginx** handles all high-performance static file serving, **Quartz** manages the interactive graph structure, and **Django** operates strictly as an API backend to validate users, scan uploads via **ClamAV**, and trigger notifications via **n8n**.
 
 ```mermaid
 flowchart TD
-    %% ==========================================
-    %% 1. USUARIOS Y ENTRADA
-    %% ==========================================
-    subgraph G_Clients ["👥 Actores"]
-        Estudiante["🎓 Alumno / Sansano"]
-        Admin["🛠️ Administrador"]
+    subgraph G_Clients ["👥 Actors"]
+        Estudiante["🎓 Student / Sansano"]
+        Admin["🛠️ Administrator"]
     end
 
-    subgraph G_Gateway ["🌐 Capa Reverse Proxy"]
-        Nginx{"Nginx Routing<br/>telematica.josnic.cl"}
+    subgraph G_Gateway ["🌐 Reverse Proxy Layer"]
+        Nginx{"Nginx Routing"}
     end
 
-    Estudiante ==>|Peticiones HTTP| Nginx
-    Admin ==>|Gestión| Nginx
+    Estudiante ==>|HTTP Requests| Nginx
+    Admin ==>|Management| Nginx
 
-    %% ==========================================
-    %% 2. SERVICIOS DE CONSULTA PÚBLICA (SOLO LECTURA)
-    %% ==========================================
-    subgraph G_Public ["📖 Repositorio Público (Solo Lectura)"]
-        Landing["🏠 Landing / Directorio<br/><code>/</code>"]
-        Quartz["🕸️ Malla y Grafos Quartz<br/><code>/quartz/</code>"]
-        StaticFiles["📦 Archivos y Descargas 10+ GB<br/><code>/recursos/ (sendfile)</code>"]
+    subgraph G_Public ["📖 Public Repository (Read-Only)"]
+        Landing["🏠 Landing / Directory<br/><code>/</code>"]
+        Quartz["🕸️ Quartz Graphs<br/><code>/quartz/</code>"]
+        StaticFiles["📦 Large Files (10+ GB)<br/><code>/recursos/ (sendfile)</code>"]
     end
 
     Nginx -->|/| Landing
     Nginx -->|/quartz/| Quartz
     Nginx -->|/recursos/| StaticFiles
 
-    %% ==========================================
-    %% 3. PIPELINE DE APORTES (DJANGO + SEGURIDAD)
-    %% ==========================================
-    subgraph G_App ["⚙️ Backend Django"]
-        FormBuzon["📥 Buzón de Envío<br/><code>/buzon/</code>"]
-        AuthOTP["🔑 Validador OTP<br/>(Dominios @usm.cl)"]
-        DjangoAdmin["🛡️ Panel de Control<br/><code>/admin/</code>"]
-        DB[(🗄️ Base de Datos<br/>Model: Aporte)]
+    subgraph G_App ["⚙️ Django Backend API"]
+        FormBuzon["📥 Upload Endpoint<br/><code>/buzon/</code>"]
+        AuthOTP["🔑 OTP Validator<br/>(@usm.cl)"]
+        DjangoAdmin["🛡️ Admin Panel<br/><code>/admin/</code>"]
+        DB[(🗄️ PostgreSQL DB)]
     end
 
     Nginx -->|/buzon/| FormBuzon
     Nginx -->|/admin/| DjangoAdmin
 
-    %% Flujo de Verificación OTP
-    FormBuzon -->|Pide PIN| AuthOTP
-    AuthOTP -->|SMTP Correo| MailSvc["📧 Servidor SMTP USM"]
-    MailSvc -.->|Código 6 dígitos| Estudiante
+    FormBuzon -->|Requests PIN| AuthOTP
+    AuthOTP -->|SMTP Mail| MailSvc["📧 USM SMTP Server"]
+    MailSvc -.->|6-digit code| Estudiante
 
-    %% Subida y Escaneo
-    FormBuzon -->|Upload autenticado| DirTmp[("⏳ /storage/tmp/")]
+    FormBuzon -->|Authenticated Upload| DirTmp[("⏳ /data/buzon/tmp/")]
     DirTmp --> ScanNode{"🛡️ ClamAV Engine"}
 
-    %% ==========================================
-    %% 4. SEGURIDAD, ALMACÉN Y ALERTAS
-    %% ==========================================
-    subgraph G_Storage ["💾 Almacenamiento Seguro"]
-        DirClean[("✅ /storage/clean/")]
-        DirQuarantine[("☣️ /storage/quarantine/")]
+    subgraph G_Storage ["💾 Secure Storage"]
+        DirClean[("✅ /data/buzon/safe/")]
+        DirQuarantine[("☣️ /data/buzon/quarantine/")]
     end
 
-    subgraph G_Alerts ["🔔 Orquestación y Alertas"]
-        N8N["⚡ n8n Webhooks Engine"]
-        ChannelAlerts["📱 Alerta/Notificación"]
+    subgraph G_Alerts ["🔔 Orchestration & Alerts"]
+        N8N["⚡ n8n Webhooks"]
+        ChannelAlerts["📱 Alert/Notification"]
     end
 
-    %% Decisión ClamAV
-    ScanNode -- "Limpio (Exit 0)" --> DirClean
-    DirClean -->|Registra estado| DB
-    DirClean -->|Webhook aporte limpio| N8N
+    ScanNode -- "Clean (Exit 0)" --> DirClean
+    DirClean -->|Logs state| DB
+    DirClean -->|Webhook (Clean File)| N8N
 
-    ScanNode -- "Infectado (Exit 1)" --> DirQuarantine
-    DirQuarantine -->|Webhook amenaza| N8N
-
+    ScanNode -- "Infected (Exit 1)" --> DirQuarantine
+    DirQuarantine -->|Webhook (Threat)| N8N
     N8N --> ChannelAlerts
 
-    %% ==========================================
-    %% 5. PUBLICACIÓN POR EL ADMINISTRADOR
-    %% ==========================================
-    Admin -->|Revisa pendientes| DjangoAdmin
+    Admin -->|Reviews pending| DjangoAdmin
     DjangoAdmin <--> DB
-    Admin -.->|Mueve material clasificado| StaticFiles
-    Admin -.->|Actualiza notas .md| Quartz
+    Admin -.->|Moves validated files| StaticFiles
+    Admin -.->|Updates .md notes| Quartz
 
-    %% ==========================================
-    %% CLASES Y ESTILOS (Paleta Semántica)
-    %% ==========================================
-    classDef client fill:#eef2f6,stroke:#475569,stroke-width:2px,color:#0f172a;
-    classDef gateway fill:#0284c7,stroke:#0369a1,stroke-width:2px,color:#ffffff,font-weight:bold;
-    classDef pubService fill:#e0f2fe,stroke:#38bdf8,stroke-width:2px,color:#0369a1;
-    classDef djangoApp fill:#f8fafc,stroke:#64748b,stroke-width:2px,color:#1e293b;
-    classDef cleanFlow fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d;
-    classDef threatFlow fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#7f1d1d;
-    classDef alertFlow fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#78350f;
-
-    class Estudiante,Admin client;
-    class Nginx gateway;
-    class Landing,Quartz,StaticFiles pubService;
-    class FormBuzon,AuthOTP,DjangoAdmin,DB djangoApp;
-    class DirClean cleanFlow;
-    class DirQuarantine threatFlow;
-    class N8N,ChannelAlerts alertFlow;
 ```
+
+## 📂 Directory Structure
+
+The repository relies on mapped Docker volumes to separate the application logic from the heavy static assets and the ClamAV signature database.
+
+* **`clamav_data/`**: Persistent storage for ClamAV virus signatures.
+* **`data/`**: The main storage hub.
+* `buzon/quarantine/`: Isolated infected files detected by ClamAV.
+* `buzon/safe/`: Clean files awaiting admin approval via n8n.
+* `landing/`: Static HTML/CSS for the root (`/`) frontend.
+* `quartz_public/`: Compiled static site generated by Quartz (`/quartz/`).
+* `recursos/`: 10+ GB of heavy university files served via Nginx `sendfile`.
+
+
+* **`django_app/`**: The headless Django API (`dashboard-interna`).
+* **`nginx/`**: Nginx configuration files routing traffic to the static folders or the Django API.
+
+## ⚙️ Prerequisites & Setup
+
+1. **Docker & Docker Compose** must be installed on your server.
+2. A working instance of **n8n** to receive the webhook triggers.
+3. Clone the repository and copy the environment template:
+```bash
+cp env.example .env
+
+```
+
+
+
+## 🔐 Environment Variables (`.env`)
+
+Configure the following variables before deploying to match the Django `settings.py` decoupling configuration:
+
+```env
+# Django Security
+SECRET_KEY=your_secure_random_string
+DEBUG=False
+ALLOWED_HOSTS=telematica.yourdomain.cl,127.0.0.1
+CSRF_TRUSTED_ORIGINS=https://telematica.yourdomain.cl
+
+# PostgreSQL Database
+POSTGRES_DB=buzon_db
+POSTGRES_USER=buzon_user
+POSTGRES_PASSWORD=your_db_password
+POSTGRES_HOST=db
+POSTGRES_PORT=5432
+
+# SMTP Configuration (For OTP)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+
+# n8n Webhooks
+N8N_WEBHOOK_CLEAN=https://n8n.yourdomain.cl/webhook/buzon-clean
+N8N_WEBHOOK_THREAT=https://n8n.yourdomain.cl/webhook/buzon-threat
+
+```
+
+## 🚀 Deployment
+
+With your `.env` configured and your static files placed in their respective `data/` subdirectories, deploy the entire stack using Docker Compose:
+
+```bash
+docker compose up -d --build
+
+```
+
+The ClamAV container might take a couple of minutes to download the latest signature database on its first boot.
+
+## 🛠️ Operational Workflow
+
+1. **Uploads:** Students upload files via the headless API. The file is temporarily stored and passed to the ClamAV socket.
+2. **Analysis:** ClamAV scans the stream. If infected, it goes to `data/buzon/quarantine/` and triggers a high-priority n8n alert.
+3. **Approval:** If clean, it moves to `data/buzon/safe/`. An n8n webhook notifies the admin (acting as a to-do list).
+4. **Publishing:** The admin manually reviews the file, moves it to `data/recursos/`, and updates the corresponding Quartz Markdown note. No Django Admin interaction is strictly required.
