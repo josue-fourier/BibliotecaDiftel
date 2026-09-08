@@ -1,3 +1,4 @@
+clamd
 watchdog
 requests
-clamd
+python-decouple

@@ -3,6 +3,7 @@ import time
 import logging
 import requests
 import clamd
+from decouple import config
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -12,10 +13,10 @@ WATCH_DIR = "/data/buzon/tmp"
 SAFE_DIR = "/data/buzon/safe"
 QUARANTINE_DIR = "/data/buzon/quarantine"
 
-WEBHOOK_CLEAN = os.getenv("N8N_WEBHOOK_CLEAN")
-WEBHOOK_THREAT = os.getenv("N8N_WEBHOOK_THREAT")
-CLAMAV_HOST = os.getenv("CLAMAV_HOST", "clamav")
-CLAMAV_PORT = int(os.getenv("CLAMAV_PORT", "3310"))
+WEBHOOK_CLEAN = config("N8N_WEBHOOK_CLEAN", default="")
+WEBHOOK_THREAT = config("N8N_WEBHOOK_THREAT", default="")
+CLAMAV_HOST = config("CLAMAV_HOST", default="clamav")
+CLAMAV_PORT = config("CLAMAV_PORT", default=3310, cast=int)
 
 # Ensure directories exist
 for d in [WATCH_DIR, SAFE_DIR, QUARANTINE_DIR]:

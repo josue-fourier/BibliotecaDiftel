@@ -114,7 +114,8 @@ def upload_file(request):
         return JsonResponse({"detail": "Faltan parámetros requeridos"}, status=400)
 
     safe_name = sanitize_filename(uploaded_file.name)
-    unique_safe_name = f"{int(time.time())}_{safe_name}"
+    safe_email = sanitize_filename(email.replace('@', '_'))
+    unique_safe_name = f"{int(time.time())}_{safe_email}_{safe_name}"
     file_path = os.path.join(TMP_DIR, unique_safe_name)
 
     if uploaded_file.size > MAX_SIZE_BYTES:
