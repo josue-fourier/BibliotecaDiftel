@@ -31,11 +31,10 @@ Ideal si tienes pruebas, resúmenes o PDFs pesados:
 
 ### Opción B: Escribir y Categorizar Apuntes ✍️ (Modo Pro)
 Ideal si quieres organizar las mallas o crear guías de estudio usando Markdown:
-1. **Clona** nuestro repositorio desde GitHub.
+1. **Clona** [nuestro repositorio en GitHub](https://github.com/josue-fourier/BibliotecaDiftel).
 2. **Usa Obsidian**: Abre la carpeta `quartz_app/content/` como si fuera tu bóveda.
 3. **Edita**: Crea apuntes. Incluye los enlaces a los archivos desde nuestro [Explorador de Achivos](https://diftel.josnic.cl/quartz/archivos_pesados).
 4. **Publica**: Sube tus cambios a GitHub y abre un **Pull Request**. ¡Lo revisaremos y se subirá automáticamente a la web!
-
 
 
 ###### Autoría
