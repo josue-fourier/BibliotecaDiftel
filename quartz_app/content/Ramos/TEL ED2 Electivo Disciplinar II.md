@@ -8,7 +8,7 @@ Este es el repositorio central para la asignatura de Electivo Disciplinar II. Aq
 ---
 
 ### 📝 Resúmenes y Apuntes
-*(Aún no hay apuntes subidos. ¡Sé el primero en aportar a través del [Buzón](../buzon/)!)*
+*(Aún no hay apuntes subidos. ¡Sé el primero en aportar a través del [Buzón](http://127.0.0.1:8080/buzon/)!)*
 
 ### 📝 Certámenes Pasados
 *(Espacio para pautas y certámenes anteriores)*

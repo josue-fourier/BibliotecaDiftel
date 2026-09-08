@@ -2,67 +2,67 @@
 <rss version="2.0">
     <channel>
       <title>Quartz 5</title>
-      <link>https://quartz.jzhao.xyz</link>
+      <link>https://127.0.0.1:8080/quartz</link>
       <description>Last 10 notes on Quartz 5</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
     <title>Mallas</title>
-    <link>https://quartz.jzhao.xyz/mallas/</link>
-    <guid>https://quartz.jzhao.xyz/mallas/</guid>
+    <link>https://127.0.0.1:8080/quartz/mallas/</link>
+    <guid>https://127.0.0.1:8080/quartz/mallas/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:20:21 GMT</pubDate>
+    <pubDate>Tue, 08 Sep 2026 04:24:18 GMT</pubDate>
   </item><item>
     <title>Ramos</title>
-    <link>https://quartz.jzhao.xyz/ramos/</link>
-    <guid>https://quartz.jzhao.xyz/ramos/</guid>
+    <link>https://127.0.0.1:8080/quartz/ramos/</link>
+    <guid>https://127.0.0.1:8080/quartz/ramos/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:20:21 GMT</pubDate>
+    <pubDate>Tue, 08 Sep 2026 04:24:18 GMT</pubDate>
   </item><item>
     <title>Tag Index</title>
-    <link>https://quartz.jzhao.xyz/tags/</link>
-    <guid>https://quartz.jzhao.xyz/tags/</guid>
+    <link>https://127.0.0.1:8080/quartz/tags/</link>
+    <guid>https://127.0.0.1:8080/quartz/tags/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:20:21 GMT</pubDate>
+    <pubDate>Tue, 08 Sep 2026 04:24:18 GMT</pubDate>
   </item><item>
     <title>Malla Antigua</title>
-    <link>https://quartz.jzhao.xyz/mallas/malla-antigua</link>
-    <guid>https://quartz.jzhao.xyz/mallas/malla-antigua</guid>
+    <link>https://127.0.0.1:8080/quartz/mallas/malla-antigua</link>
+    <guid>https://127.0.0.1:8080/quartz/mallas/malla-antigua</guid>
     <description><![CDATA[ 🗺️ Malla Antigua Este es el índice de ramos ordenado por semestre. Haz clic en cualquier asignatura para ver sus apuntes y recursos. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item><item>
     <title>Malla Nueva</title>
-    <link>https://quartz.jzhao.xyz/mallas/malla-nueva</link>
-    <guid>https://quartz.jzhao.xyz/mallas/malla-nueva</guid>
+    <link>https://127.0.0.1:8080/quartz/mallas/malla-nueva</link>
+    <guid>https://127.0.0.1:8080/quartz/mallas/malla-nueva</guid>
     <description><![CDATA[ 🗺️ Malla Nueva Este es el índice de ramos ordenado por semestre. Haz clic en cualquier asignatura para ver sus apuntes y recursos. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item><item>
     <title>DEW 0 Deportes</title>
-    <link>https://quartz.jzhao.xyz/ramos/dew-0-deportes</link>
-    <guid>https://quartz.jzhao.xyz/ramos/dew-0-deportes</guid>
+    <link>https://127.0.0.1:8080/quartz/ramos/dew-0-deportes</link>
+    <guid>https://127.0.0.1:8080/quartz/ramos/dew-0-deportes</guid>
     <description><![CDATA[ DEW 0 Deportes Este es el repositorio central para la asignatura de Deportes. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item><item>
     <title>DGD72825 Taller Memoria Multidisciplinaria I</title>
-    <link>https://quartz.jzhao.xyz/ramos/dgd72825-taller-memoria-multidisciplinaria-i</link>
-    <guid>https://quartz.jzhao.xyz/ramos/dgd72825-taller-memoria-multidisciplinaria-i</guid>
+    <link>https://127.0.0.1:8080/quartz/ramos/dgd72825-taller-memoria-multidisciplinaria-i</link>
+    <guid>https://127.0.0.1:8080/quartz/ramos/dgd72825-taller-memoria-multidisciplinaria-i</guid>
     <description><![CDATA[ DGD72825 Taller Memoria Multidisciplinaria I Este es el repositorio central para la asignatura de Taller Memoria Multidisciplinaria I. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item><item>
     <title>DGD72925 Taller Memoria Multidisciplinaria II 12</title>
-    <link>https://quartz.jzhao.xyz/ramos/dgd72925-taller-memoria-multidisciplinaria-ii-12</link>
-    <guid>https://quartz.jzhao.xyz/ramos/dgd72925-taller-memoria-multidisciplinaria-ii-12</guid>
+    <link>https://127.0.0.1:8080/quartz/ramos/dgd72925-taller-memoria-multidisciplinaria-ii-12</link>
+    <guid>https://127.0.0.1:8080/quartz/ramos/dgd72925-taller-memoria-multidisciplinaria-ii-12</guid>
     <description><![CDATA[ DGD72925 Taller Memoria Multidisciplinaria II 12 Este es el repositorio central para la asignatura de Taller Memoria Multidisciplinaria II 12. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item><item>
     <title>ELO204 Probabilidad y Procesos Aleatorios I</title>
-    <link>https://quartz.jzhao.xyz/ramos/elo204-probabilidad-y-procesos-aleatorios-i</link>
-    <guid>https://quartz.jzhao.xyz/ramos/elo204-probabilidad-y-procesos-aleatorios-i</guid>
+    <link>https://127.0.0.1:8080/quartz/ramos/elo204-probabilidad-y-procesos-aleatorios-i</link>
+    <guid>https://127.0.0.1:8080/quartz/ramos/elo204-probabilidad-y-procesos-aleatorios-i</guid>
     <description><![CDATA[ ELO204 Probabilidad y Procesos Aleatorios I Este es el repositorio central para la asignatura de Probabilidad y Procesos Aleatorios I. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item><item>
     <title>ELO23425 Redes de Computadores</title>
-    <link>https://quartz.jzhao.xyz/ramos/elo23425-redes-de-computadores</link>
-    <guid>https://quartz.jzhao.xyz/ramos/elo23425-redes-de-computadores</guid>
+    <link>https://127.0.0.1:8080/quartz/ramos/elo23425-redes-de-computadores</link>
+    <guid>https://127.0.0.1:8080/quartz/ramos/elo23425-redes-de-computadores</guid>
     <description><![CDATA[ ELO23425 Redes de Computadores Este es el repositorio central para la asignatura de Redes de Computadores. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:17:46 GMT</pubDate>
   </item>

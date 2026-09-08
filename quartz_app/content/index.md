@@ -12,4 +12,4 @@ Para navegar por las asignaturas, puedes explorar los índices por semestre de a
 - [[Malla Antigua]]
 
 > [!tip] Aporta al Repositorio
-> Si tienes resúmenes o certámenes pasados, puedes subirlos a través de nuestro [Buzón Seguro](../buzon/). Una vez que tu aporte sea escaneado por nuestro antivirus, será categorizado y añadido a la bóveda por el equipo de DIFTEL.
+> Si tienes resúmenes o certámenes pasados, puedes subirlos a través de nuestro [Buzón Seguro](http://127.0.0.1:8080/buzon/). Una vez que tu aporte sea escaneado por nuestro antivirus, será categorizado y añadido a la bóveda por el equipo de DIFTEL.
