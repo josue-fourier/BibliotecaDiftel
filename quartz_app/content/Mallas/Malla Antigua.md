@@ -28,7 +28,7 @@ Este es el índice de ramos ordenado por semestre. Haz clic en cualquier asignat
 ## Semestre 6
 - [[HCW102 Inglés IIi]]
 - [[ELO241 Laboratorio de Comunicaciones]]
-- 
+- [[TEL231 Sistemas de Telecomunicaciones]]
 ## Semestre 7
 - [[HCW200 Inglés IV]]
 - [[TEL360 Pensamiento de Diseño En]]
