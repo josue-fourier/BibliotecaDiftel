@@ -57,14 +57,14 @@ def request_pin(request):
     new_usm_user = USMUser(pin=pin, email=email)
     new_usm_user.save() # Create user whose pin is not expired and has not been checked or validated
 
-    email_name = config("EMAIL_MAILER", default="default")
+    mailer_name = config("EMAIL_MAILER", default="default")
 
     send_mail(
         "¡Repositorio Telemático!",
         f"Este es tu pin de verificación: {pin}. Tiene 15 minutos de vigencia. Úsalo en el buzón para subir archivos y solicitar su adición.",
         "jleivap@usm.cl",
-        [email],
-        using=email_name
+        [email,],
+        using=mailer_name
     )
 
     return JsonResponse({"message": "PIN enviado correctamente. Revisa tu correo."}, status=200)

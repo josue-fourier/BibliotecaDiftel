@@ -3,11 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buzón Seguro - Biblioteca Diftel</title>
+    <title>Buzón Seguro - DIFTEL USM</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        usm: {
+                            blue: '#004B87',
+                            dark: '#00335c',
+                        },
+                        diftel: {
+                            yellow: '#FFB81C',
+                            cyan: '#00B5E2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
         .spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
@@ -22,88 +47,145 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-blue-600 p-6 text-white text-center">
-            <h1 class="text-2xl font-bold">Buzón Universitario</h1>
-            <p class="text-blue-100 mt-2 text-sm">Sube tus archivos de forma segura para Biblioteca Diftel.</p>
-        </div>
-
-        <div class="p-8">
-            <!-- Alert Box -->
-            <div id="alert-box" class="hidden mb-6 p-4 rounded-lg text-sm font-medium"></div>
-
-            <!-- STEP 1: Request PIN -->
-            <div id="step-1">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">1. Identificación</h2>
-                <form id="form-step-1" class="space-y-4">
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Institucional</label>
-                        <input type="email" id="email" required placeholder="estudiante@sansano.usm.cl"
-                            pattern="^[a-zA-Z0-9._%+\-]+@(sansano\.usm\.cl|usm\.cl)$"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
-                        <p class="text-xs text-gray-500 mt-1">Solo dominios @usm.cl o @sansano.usm.cl permitidos.</p>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+    
+    <!-- Navbar (Shared) -->
+    <nav class="glass-nav fixed w-full z-50 top-0 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-usm-blue p-2 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
-                    <button type="submit" id="btn-step-1"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex justify-center items-center">
-                        <span id="text-step-1">Solicitar PIN</span>
-                        <div id="loader-step-1" class="hidden spinner ml-2"></div>
+                    <a href="/" class="font-extrabold text-xl tracking-tight text-usm-blue uppercase">DIFTEL <span class="text-diftel-yellow">USM</span></a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-600 font-medium hover:text-usm-blue transition-colors">Inicio</a>
+                    <a href="/quartz/" class="text-gray-600 font-medium hover:text-usm-blue transition-colors">Apuntes</a>
+                    <a href="/buzon/" class="text-usm-blue font-semibold hover:text-diftel-cyan transition-colors">Subir Material</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="text-gray-600 hover:text-usm-blue focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     </button>
-                </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <!-- Header Section -->
+            <div class="bg-usm-blue p-8 text-white text-center relative overflow-hidden">
+                <!-- Background Accent -->
+                <div class="absolute -right-8 -top-8 w-24 h-24 bg-usm-dark rounded-full opacity-50"></div>
+                <div class="absolute -left-4 -bottom-4 w-16 h-16 bg-diftel-cyan rounded-full opacity-20"></div>
+                
+                <h1 class="text-2xl font-bold relative z-10">Buzón de Aportes</h1>
+                <p class="text-blue-100 mt-2 text-sm relative z-10">Autenticación segura para la comunidad Telemática</p>
             </div>
 
-            <!-- STEP 2: Upload File -->
-            <div id="step-2" class="hidden">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">2. Subir Archivo</h2>
-                <p class="text-sm text-gray-600 mb-4">Hemos enviado un código PIN de 6 dígitos a <strong id="display-email"></strong>.</p>
-                <form id="form-step-2" class="space-y-4">
-                    <div>
-                        <label for="pin" class="block text-sm font-medium text-gray-700 mb-1">Código PIN</label>
-                        <input type="text" id="pin" required placeholder="123456" maxlength="6"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center tracking-widest font-mono text-lg transition-colors">
+            <div class="p-8">
+                <!-- Alert Box -->
+                <div id="alert-box" class="hidden mb-6 p-4 rounded-lg text-sm font-medium border"></div>
+
+                <!-- STEP 1: Request PIN -->
+                <div id="step-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-8 rounded-full bg-diftel-yellow text-usm-dark font-bold flex items-center justify-center shadow-sm">1</div>
+                        <h2 class="text-lg font-bold text-usm-dark">Identificación USM</h2>
                     </div>
-                    <div>
-                        <label for="file" class="block text-sm font-medium text-gray-700 mb-1">Archivo a subir</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-500 transition-colors bg-gray-50">
-                            <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600 justify-center">
-                                    <label for="file" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-1">
-                                        <span>Seleccionar archivo</span>
-                                        <input id="file" name="file" type="file" class="sr-only" required>
-                                    </label>
+                    <form id="form-step-1" class="space-y-5">
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Correo Institucional</label>
+                            <input type="email" id="email" required placeholder="estudiante@sansano.usm.cl"
+                                pattern="^[a-zA-Z0-9._%+\-]+@(sansano\.usm\.cl|usm\.cl)$"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-usm-blue focus:border-usm-blue transition-colors bg-gray-50 focus:bg-white outline-none">
+                            <p class="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                                <svg class="w-4 h-4 text-diftel-cyan" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                                Solo para @sansano.usm.cl y @usm.cl
+                            </p>
+                        </div>
+                        <button type="submit" id="btn-step-1"
+                            class="w-full bg-usm-blue hover:bg-usm-dark text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 flex justify-center items-center shadow-md hover:shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-usm-blue">
+                            <span id="text-step-1">Solicitar código PIN</span>
+                            <div id="loader-step-1" class="hidden spinner ml-2"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- STEP 2: Upload File -->
+                <div id="step-2" class="hidden">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 rounded-full bg-diftel-cyan text-white font-bold flex items-center justify-center shadow-sm">2</div>
+                        <h2 class="text-lg font-bold text-usm-dark">Subir Material</h2>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-6 shadow-inner">
+                        <p class="text-sm text-usm-dark font-medium text-center">PIN de 6 dígitos enviado a:<br><strong id="display-email" class="text-usm-blue break-all"></strong></p>
+                    </div>
+                    <form id="form-step-2" class="space-y-5">
+                        <div>
+                            <label for="pin" class="block text-sm font-semibold text-gray-700 mb-1">Código de validación</label>
+                            <input type="text" id="pin" required placeholder="123456" maxlength="6"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-diftel-cyan focus:border-diftel-cyan text-center tracking-widest font-mono text-2xl transition-colors bg-gray-50 focus:bg-white outline-none">
+                        </div>
+                        <div>
+                            <label for="file" class="block text-sm font-semibold text-gray-700 mb-1">Archivo a subir</label>
+                            <p class="text-xs text-usm-blue mb-3 font-medium bg-blue-50 p-2 rounded border border-blue-100">
+                                💡 <strong>Nota:</strong> Sólo puedes subir 1 archivo por envío. Si tienes múltiples documentos (p. ej. varias fotos de una prueba), por favor agrúpalos en un archivo comprimido (.zip o .rar).
+                            </p>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-xl hover:border-diftel-cyan transition-colors bg-gray-50 group cursor-pointer" onclick="document.getElementById('file').click()">
+                                <div class="space-y-1 text-center">
+                                    <div class="mx-auto h-12 w-12 text-gray-400 group-hover:text-diftel-cyan transition-colors flex items-center justify-center">
+                                        <svg class="h-10 w-10" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex text-sm text-gray-600 justify-center mt-2">
+                                        <label for="file" class="relative rounded-md font-bold text-usm-blue hover:text-diftel-cyan focus-within:outline-none px-1 transition-colors cursor-pointer">
+                                            <span>Examinar archivos</span>
+                                            <input id="file" name="file" type="file" class="sr-only" required>
+                                        </label>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1" id="file-name-display">Ningún archivo seleccionado</p>
                                 </div>
-                                <p class="text-xs text-gray-500" id="file-name-display">Ningún archivo seleccionado</p>
                             </div>
                         </div>
-                    </div>
-                    <button type="submit" id="btn-step-2"
-                        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex justify-center items-center">
-                        <span id="text-step-2">Subir Archivo Seguro</span>
-                        <div id="loader-step-2" class="hidden spinner ml-2"></div>
-                    </button>
-                    <button type="button" id="btn-back" class="w-full text-sm text-gray-500 hover:text-gray-800 text-center mt-2 underline">Volver atrás</button>
-                </form>
-            </div>
-            
-            <!-- Success State -->
-            <div id="step-success" class="hidden text-center py-6">
-                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-                    <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
+                        <button type="submit" id="btn-step-2"
+                            class="w-full bg-diftel-cyan hover:bg-[#009bc2] text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 flex justify-center items-center shadow-md hover:shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-diftel-cyan">
+                            <span id="text-step-2">Enviar al Buzón</span>
+                            <div id="loader-step-2" class="hidden spinner ml-2"></div>
+                        </button>
+                        <button type="button" id="btn-back" class="w-full text-sm text-gray-500 hover:text-usm-dark text-center mt-2 transition-colors font-medium">← Volver atrás</button>
+                    </form>
                 </div>
-                <h2 class="text-xl font-bold text-gray-900 mb-2">¡Archivo Subido!</h2>
-                <p class="text-sm text-gray-600">El archivo ha sido recibido y está siendo analizado por nuestro antivirus. Será publicado una vez validado.</p>
-                <button type="button" onclick="location.reload()" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
-                    Subir otro archivo
-                </button>
-            </div>
+                
+                <!-- Success State -->
+                <div id="step-success" class="hidden text-center py-8">
+                    <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-50 mb-6 border-4 border-green-100 shadow-sm">
+                        <svg class="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-usm-dark mb-3">¡Material Recibido!</h2>
+                    <p class="text-gray-600 leading-relaxed mb-8">Tu archivo pasará por nuestro sistema de análisis de seguridad antes de publicarse en la biblioteca oficial. ¡Gracias por aportar a la comunidad!</p>
+                    <button type="button" onclick="location.reload()" class="w-full border-2 border-usm-blue text-usm-blue hover:bg-usm-blue hover:text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 shadow-sm">
+                        Subir otro archivo
+                    </button>
+                </div>
 
+            </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-usm-dark text-white border-t-4 border-diftel-yellow mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+            <span class="font-bold">DIFTEL USM</span>
+            <p class="text-gray-400 text-sm mt-1 text-center">Organización de Estudiantes de Ingeniería Civil Telemática</p>
+        </div>
+    </footer>
 
     <script>
         const step1 = document.getElementById('step-1');
@@ -123,14 +205,16 @@
         fileInput.addEventListener('change', (e) => {
             if(e.target.files.length > 0) {
                 fileNameDisplay.textContent = e.target.files[0].name;
+                fileNameDisplay.classList.add('text-usm-blue', 'font-semibold');
             } else {
                 fileNameDisplay.textContent = "Ningún archivo seleccionado";
+                fileNameDisplay.classList.remove('text-usm-blue', 'font-semibold');
             }
         });
 
         function showAlert(msg, type = 'error') {
             alertBox.textContent = msg;
-            alertBox.className = `mb-6 p-4 rounded-lg text-sm font-medium ${type === 'error' ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'}`;
+            alertBox.className = `mb-6 p-4 rounded-lg text-sm font-medium border ${type === 'error' ? 'bg-red-50 text-red-800 border-red-100' : 'bg-green-50 text-green-800 border-green-100'}`;
             alertBox.classList.remove('hidden');
         }
 
@@ -140,7 +224,6 @@
 
         function setLoading(step, isLoading) {
             const btn = document.getElementById(`btn-step-${step}`);
-            const text = document.getElementById(`text-step-${step}`);
             const loader = document.getElementById(`loader-step-${step}`);
             
             btn.disabled = isLoading;
@@ -218,7 +301,7 @@
 
                 const res = await fetch('/buzon/api/upload', {
                     method: 'POST',
-                    body: formData // Fetch automatically sets multipart/form-data boundary
+                    body: formData
                 });
 
                 if(!res.ok) {

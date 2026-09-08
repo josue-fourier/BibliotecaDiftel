@@ -21,7 +21,7 @@ services:
     build: ./django_app
     container_name: telematica-django
     restart: unless-stopped
-    command: gunicorn "dashboard_interna.wsgi:application" --bind 0.0.0.0:8000 --workers 3 --timeout 120
+    command: gunicorn "dashboard_interna.wsgi:application" --bind 0.0.0.0:8000 --access-logfile - --error-logfile - --log-level info --capture-output --workers 3 --timeout 120
     environment:
       - DJANGO_SETTINGS_MODULE=dashboard_interna.settings
       - CLAMAV_HOST=clamav
@@ -70,6 +70,9 @@ services:
     build: ./clamav_watcher
     container_name: telematica-watcher
     restart: unless-stopped
+    networks:
+      - default
+      - red_n8n
     environment:
       - PYTHONUNBUFFERED=1
       - N8N_WEBHOOK_CLEAN=${N8N_WEBHOOK_CLEAN}
@@ -81,3 +84,8 @@ services:
     depends_on:
       clamav:
         condition: service_started
+
+networks:
+  red_n8n:
+    external: true
+    name: n8n_default

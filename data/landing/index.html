@@ -3,74 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Diftel - Telemática Hub</title>
+    <title>DIFTEL USM - Difusión Telemática</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        usm: {
+                            blue: '#004B87',
+                            dark: '#00335c',
+                        },
+                        diftel: {
+                            yellow: '#FFB81C',
+                            cyan: '#00B5E2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
         .gradient-text {
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-image: linear-gradient(to right, #2563eb, #7c3aed);
+            background-image: linear-gradient(to right, #004B87, #00B5E2);
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm border-b border-gray-100">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+    <!-- Navbar (Shared) -->
+    <nav class="glass-nav fixed w-full z-50 top-0 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 7.5l-6-3v7l6 3 6-3v-7l-6 3z"/></svg>
-                    <span class="font-bold text-xl tracking-tight text-gray-900">Biblioteca Diftel</span>
+                <div class="flex items-center gap-3">
+                    <div class="bg-usm-blue p-2 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <a href="/" class="font-extrabold text-xl tracking-tight text-usm-blue uppercase">DIFTEL <span class="text-diftel-yellow">USM</span></a>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="text-usm-blue font-semibold hover:text-diftel-cyan transition-colors">Inicio</a>
+                    <a href="/quartz/" class="text-gray-600 font-medium hover:text-usm-blue transition-colors">Apuntes</a>
+                    <a href="/buzon/" class="text-gray-600 font-medium hover:text-usm-blue transition-colors">Subir Material</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="text-gray-600 hover:text-usm-blue focus:outline-none">
+                        <!-- Hamburger Icon -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl w-full text-center space-y-12">
+    <main class="flex-grow flex flex-col items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl w-full text-center space-y-12">
             
             <!-- Hero -->
-            <div class="space-y-4">
-                <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-gray-900">
-                    Tu <span class="gradient-text">Repositorio Central</span> de Telemática.
+            <div class="space-y-6 mt-10">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-usm-blue font-medium text-sm border border-blue-100 shadow-sm">
+                    <span class="flex h-2 w-2 rounded-full bg-diftel-cyan mr-2"></span>
+                    Repositorio Oficial de Ingeniería Civil Telemática
+                </div>
+                <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight text-usm-dark leading-tight">
+                    Difusión <span class="gradient-text">Telemática</span>
                 </h1>
-                <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-                    Accede a apuntes, recursos pesados y contribuye a la comunidad estudiantil de forma rápida, libre y segura.
+                <p class="mt-4 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
+                    Un espacio hecho por y para estudiantes. Impulsando la <strong class="text-usm-blue font-semibold">Feria de Proyectos</strong>, Puertas Abiertas y demostrando por qué somos La Universidad STEM de Chile.
                 </p>
             </div>
 
             <!-- Action Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
                 
                 <!-- Explorar (Quartz) -->
-                <a href="/quartz/" class="group relative bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-blue-200 transition-all duration-300 text-left overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <svg class="w-24 h-24 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
-                    </div>
+                <a href="/quartz/" class="group relative bg-white p-8 rounded-2xl shadow-md border-l-4 border-diftel-cyan hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-cyan-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out z-0"></div>
                     <div class="relative z-10">
-                        <span class="inline-flex items-center justify-center p-3 bg-blue-50 rounded-xl text-blue-600 mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        </span>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Explorar Apuntes</h3>
-                        <p class="text-gray-600">Navega por la red de grafos interconectados de Quartz con todos los resúmenes y guías de estudio.</p>
+                        <div class="w-14 h-14 bg-diftel-cyan/10 rounded-xl flex items-center justify-center mb-6">
+                            <svg class="w-7 h-7 text-diftel-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-usm-dark mb-3">Repositorio Quartz</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed">Navega por nuestra red interconectada de apuntes, laboratorios y guías de estudio. Acceso libre para toda la comunidad.</p>
                     </div>
                 </a>
 
                 <!-- Subir (Buzón) -->
-                <a href="/buzon/" class="group relative bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-purple-200 transition-all duration-300 text-left overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <svg class="w-24 h-24 text-purple-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.36 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
-                    </div>
+                <a href="/buzon/" class="group relative bg-white p-8 rounded-2xl shadow-md border-l-4 border-diftel-yellow hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-yellow-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out z-0"></div>
                     <div class="relative z-10">
-                        <span class="inline-flex items-center justify-center p-3 bg-purple-50 rounded-xl text-purple-600 mb-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                        </span>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">Buzón de Subida</h3>
-                        <p class="text-gray-600">Sube tus aportes de forma segura. Autenticado para estudiantes USM y analizado con ClamAV.</p>
+                        <div class="w-14 h-14 bg-diftel-yellow/10 rounded-xl flex items-center justify-center mb-6">
+                            <svg class="w-7 h-7 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-usm-dark mb-3">Buzón de Aportes</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed">¿Tienes material valioso? Sube tus archivos de forma segura con tu correo institucional y contribuye a la carrera.</p>
                     </div>
                 </a>
 
@@ -79,9 +117,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-100 mt-auto">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
-            &copy; 2026 Biblioteca Diftel. Desarrollado para estudiantes USM.
+    <footer class="bg-usm-dark text-white border-t-4 border-diftel-yellow mt-auto">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-lg">DIFTEL USM</span>
+                <p class="text-gray-400 text-sm mt-1">Organización de Estudiantes de Ingeniería Civil Telemática</p>
+                <p class="text-gray-400 text-sm">Universidad Técnica Federico Santa María - Campus San Joaquín</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://instagram.com/telematicausm" target="_blank" class="text-gray-300 hover:text-diftel-cyan transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+            </div>
         </div>
     </footer>
 </body>

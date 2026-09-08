@@ -1,151 +1,56 @@
-This is the English `README.md` matching your exact directory structure and headless Django setup. Save this directly into the root of your repository to document the architecture and deployment steps.
+# Biblioteca Diftel / Telemática Hub
 
-# Telemática Hub / Biblioteca Diftel
+Un repositorio autogestionado, altamente optimizado y seguro para los estudiantes de Ingeniería Civil Telemática de la Universidad Técnica Federico Santa María. Este proyecto separa la distribución pública de contenido estático de un pipeline de subida aislado y seguro, garantizando velocidad extrema y protección contra malware.
 
-A self-hosted, highly performant, and secure file repository designed for university students. This project separates public static file serving from an isolated, secure upload pipeline to ensure safety, speed, and maintainability.
+## 🚀 Arquitectura General
 
-## 🚀 Architecture Overview
+El proyecto utiliza una arquitectura de microservicios con **Docker Compose**:
+- **Nginx**: Actúa como proxy inverso y servidor de altísimo rendimiento para archivos estáticos, la landing page, el sitio compilado de Quartz y la descarga de recursos pesados.
+- **Django & PostgreSQL**: Operan de forma *headless* (sin frontend propio) gestionando la API del "Buzón Seguro", validando la identidad de los estudiantes mediante correos institucionales `@usm.cl` (PIN temporal OTP) y recibiendo los archivos.
+- **ClamAV & Watcher**: Un motor antivirus oficial y un microservicio en Python que monitorea en tiempo real las subidas temporales al buzón, escaneando, aislando amenazas y aprobando archivos limpios.
+- **Quartz v4**: Generador de sitios estáticos especializado en tomar *Vaults* (bóvedas) de Obsidian y publicarlas de forma interactiva e interconectada en la web.
 
-This project uses a headless architecture where **Nginx** handles all high-performance static file serving, **Quartz** manages the interactive graph structure, and **Django** operates strictly as an API backend to validate users, scan uploads via **ClamAV**, and trigger notifications via **n8n**.
+## 📂 Estructura de Directorios
 
-```mermaid
-flowchart TD
-    subgraph G_Clients ["👥 Actors"]
-        Estudiante["🎓 Student / Sansano"]
-        Admin["🛠️ Administrator"]
-    end
+* **`data/`**: Volúmenes montados y servidos directamente por Nginx para máxima velocidad.
+  * `landing/`: Frontend principal (Página de Inicio y formulario del Buzón).
+  * `quartz_public/`: Código HTML compilado generado por Quartz (despachado en `/quartz/`).
+  * `recursos/`: Carpeta de almacenamiento masivo para archivos pesados (PDFs, ZIPs) servidos rápidamente vía `sendfile` de Nginx (despachados en `/recursos/`).
+  * `buzon/`: Archivos en tránsito clasificados de forma automática en `tmp/`, `safe/` (limpios) y `quarantine/` (amenazas virales).
+* **`quartz_app/`**: Proyecto base de Quartz y bóveda de Obsidian (ubicada en `quartz_app/content/`).
+* **`django_app/`**: Código fuente de la API backend escrita en Django.
+* **`nginx/`**: Configuración de enrutamiento web y reglas de seguridad para Nginx.
+* **`clamav_watcher/`**: Microservicio en Python que sirve de puente entre Django y ClamAV.
 
-    subgraph G_Gateway ["🌐 Reverse Proxy Layer"]
-        Nginx{"Nginx Routing"}
-    end
+## 🛠️ Flujo de Trabajo (Operación Diaria)
 
-    Estudiante ==>|HTTP Requests| Nginx
-    Admin ==>|Management| Nginx
+La magia de este repositorio reside en cómo los aportes fluyen desde el estudiante hacia la web publicada:
 
-    subgraph G_Public ["📖 Public Repository (Read-Only)"]
-        Landing["🏠 Landing / Directory<br/><code>/</code>"]
-        Quartz["🕸️ Quartz Graphs<br/><code>/quartz/</code>"]
-        StaticFiles["📦 Large Files (10+ GB)<br/><code>/recursos/ (sendfile)</code>"]
-    end
+### 1. Recepción y Seguridad (El Buzón)
+1. **Subida Autenticada:** Los estudiantes suben su material en la vista `/buzon/`, validando su identidad con su correo institucional (solicitud de PIN OTP).
+2. **Escaneo Antivirus:** Django guarda el archivo en `data/buzon/tmp/`. El servicio `telematica-watcher` lo detecta al instante y lo escanea a través del socket TCP de ClamAV.
+3. **Clasificación Automática:** Si el archivo está limpio, se mueve automáticamente a `data/buzon/safe/`. Si contiene firmas maliciosas, queda totalmente aislado y bloqueado en `data/buzon/quarantine/`.
 
-    Nginx -->|/| Landing
-    Nginx -->|/quartz/| Quartz
-    Nginx -->|/recursos/| StaticFiles
+### 2. Gestión de Contenidos y Publicación (La Bóveda)
+Para integrar nuevos aportes validados al repositorio público:
+1. **Aprobar Aportes:** El equipo administrativo revisa la carpeta `data/buzon/safe/` y mueve los archivos que valgan la pena hacia su ubicación definitiva y categorizada en `data/recursos/[ramo]/archivo.pdf`.
+2. **Edición Visual (Obsidian):** Abres la carpeta local `quartz_app/content/` como tu Bóveda (Vault) en la aplicación **Obsidian**. Allí organizas tus archivos de texto, enlazas ramos en las mallas con `[[wikilinks]]` y añades links web estándar hacia los archivos pesados usando la ruta ultrarrápida (ej: `[Descargar Guía de Python](/recursos/inf119/guia.pdf)`).
+3. **Despliegue Automático (One-Click):** Ejecutas el script `./deploy.sh` en la raíz de tu terminal. Este script hace todo por ti:
+   - Compila la bóveda de Obsidian en HTML interactivo (usando Quartz).
+   - Mueve y actualiza automáticamente los archivos en `data/quartz_public/` (y quedan online instantáneamente).
+   - Realiza un *commit* y *push* para respaldar tu trabajo en el repositorio Git.
 
-    subgraph G_App ["⚙️ Django Backend API"]
-        FormBuzon["📥 Upload Endpoint<br/><code>/buzon/</code>"]
-        AuthOTP["🔑 OTP Validator<br/>(@usm.cl)"]
-        DjangoAdmin["🛡️ Admin Panel<br/><code>/admin/</code>"]
-        DB[(🗄️ PostgreSQL DB)]
-    end
+## ⚙️ Despliegue y Configuración
 
-    Nginx -->|/buzon/| FormBuzon
-    Nginx -->|/admin/| DjangoAdmin
-
-    FormBuzon -->|Requests PIN| AuthOTP
-    AuthOTP -->|SMTP Mail| MailSvc["📧 USM SMTP Server"]
-    MailSvc -.->|6-digit code| Estudiante
-
-    FormBuzon -->|Authenticated Upload| DirTmp[("⏳ /data/buzon/tmp/")]
-    DirTmp --> ScanNode{"🛡️ ClamAV Engine"}
-
-    subgraph G_Storage ["💾 Secure Storage"]
-        DirClean[("✅ /data/buzon/safe/")]
-        DirQuarantine[("☣️ /data/buzon/quarantine/")]
-    end
-
-    subgraph G_Alerts ["🔔 Orchestration & Alerts"]
-        N8N["⚡ n8n Webhooks"]
-        ChannelAlerts["📱 Alert/Notification"]
-    end
-
-    ScanNode -- "Clean (Exit 0)" --> DirClean
-    DirClean -->|Logs state| DB
-    DirClean -->|Webhook (Clean File)| N8N
-
-    ScanNode -- "Infected (Exit 1)" --> DirQuarantine
-    DirQuarantine -->|Webhook (Threat)| N8N
-    N8N --> ChannelAlerts
-
-    Admin -->|Reviews pending| DjangoAdmin
-    DjangoAdmin <--> DB
-    Admin -.->|Moves validated files| StaticFiles
-    Admin -.->|Updates .md notes| Quartz
-
-```
-
-## 📂 Directory Structure
-
-The repository relies on mapped Docker volumes to separate the application logic from the heavy static assets and the ClamAV signature database.
-
-* **`clamav_data/`**: Persistent storage for ClamAV virus signatures.
-* **`data/`**: The main storage hub.
-* `buzon/quarantine/`: Isolated infected files detected by ClamAV.
-* `buzon/safe/`: Clean files awaiting admin approval via n8n.
-* `landing/`: Static HTML/CSS for the root (`/`) frontend.
-* `quartz_public/`: Compiled static site generated by Quartz (`/quartz/`).
-* `recursos/`: 10+ GB of heavy university files served via Nginx `sendfile`.
-
-
-* **`django_app/`**: The headless Django API (`dashboard-interna`).
-* **`nginx/`**: Nginx configuration files routing traffic to the static folders or the Django API.
-
-## ⚙️ Prerequisites & Setup
-
-1. **Docker & Docker Compose** must be installed on your server.
-2. A working instance of **n8n** to receive the webhook triggers.
-3. Clone the repository and copy the environment template:
-```bash
-cp env.example .env
-
-```
-
-
-
-## 🔐 Environment Variables (`.env`)
-
-Configure the following variables before deploying to match the Django `settings.py` decoupling configuration:
-
-```env
-# Django Security
-SECRET_KEY=your_secure_random_string
-DEBUG=False
-ALLOWED_HOSTS=telematica.yourdomain.cl,127.0.0.1
-CSRF_TRUSTED_ORIGINS=https://telematica.yourdomain.cl
-
-# PostgreSQL Database
-POSTGRES_DB=buzon_db
-POSTGRES_USER=buzon_user
-POSTGRES_PASSWORD=your_db_password
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
-
-# SMTP Configuration (For OTP)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
-
-# n8n Webhooks
-N8N_WEBHOOK_CLEAN=https://n8n.yourdomain.cl/webhook/buzon-clean
-N8N_WEBHOOK_THREAT=https://n8n.yourdomain.cl/webhook/buzon-threat
-
-```
-
-## 🚀 Deployment
-
-With your `.env` configured and your static files placed in their respective `data/` subdirectories, deploy the entire stack using Docker Compose:
-
-```bash
-docker compose up -d --build
-
-```
-
-The ClamAV container might take a couple of minutes to download the latest signature database on its first boot.
-
-## 🛠️ Operational Workflow
-
-1. **Uploads:** Students upload files via the headless API. The file is temporarily stored and passed to the ClamAV socket.
-2. **Analysis:** ClamAV scans the stream. If infected, it goes to `data/buzon/quarantine/` and triggers a high-priority n8n alert.
-3. **Approval:** If clean, it moves to `data/buzon/safe/`. An n8n webhook notifies the admin (acting as a to-do list).
-4. **Publishing:** The admin manually reviews the file, moves it to `data/recursos/`, and updates the corresponding Quartz Markdown note. No Django Admin interaction is strictly required.
+1. **Requisitos:** Docker, Docker Compose y dependencias Node.js locales (npm) para compilar Quartz.
+2. Clona el repositorio y configura tus variables de entorno para el backend y SMTP:
+   ```bash
+   cp env.example .env
+   # Asegúrate de rellenar credenciales, configuraciones de correo y dominios.
+   ```
+3. Construye y levanta toda la infraestructura de contenedores:
+   ```bash
+   docker compose up -d --build
+   ```
+   *(Nota: ClamAV puede tardar unos minutos en iniciar por completo la primera vez, ya que debe descargar su pesada base de datos de firmas virales actualizadas).*
+4. ¡El ecosistema está listo! Entra a tu localhost o dominio y usa el Buzón, y edita el contenido con tu Bóveda de Quartz para darle forma.

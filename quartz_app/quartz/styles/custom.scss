@@ -1,0 +1,15 @@
+@use "./variables.scss" as *;
+
+// Aumentar la altura del Grafo (el ancho ya es 100% del sidebar)
+.graph {
+  height: 350px !important;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  background-color: var(--light);
+}
+
+// Forzar opacidad de los nombres de los nodos
+.graph text {
+  opacity: 1 !important;
+  font-weight: bold;
+}
