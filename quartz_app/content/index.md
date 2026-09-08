@@ -6,7 +6,7 @@ title: Biblioteca Diftel
 > [!INFO] Enlaces Rápidos
 > 🏠 [Volver al Inicio](https://diftel.josnic.cl/) | 📤 [Ir al Buzón Seguro](https://diftel.josnic.cl/buzon/)
 
-¡Bienvenido al cerebro digital de **Telemática USM**! 🧠⚡
+¡Bienvenido al cerebro digital de **Telemática SJ**! 🧠⚡
 Este repositorio interactivo agrupa material académico validado para nuestra comunidad.
 
 ---
