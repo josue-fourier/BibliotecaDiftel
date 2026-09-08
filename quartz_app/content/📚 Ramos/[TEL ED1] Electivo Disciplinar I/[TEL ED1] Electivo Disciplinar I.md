@@ -1,0 +1,14 @@
+---
+title: "[TEL ED1] Electivo Disciplinar I"
+---
+# [TEL ED1] Electivo Disciplinar I
+
+Este es el repositorio central para la asignatura de Electivo Disciplinar I. Aquí encontrarás apuntes, guías y material de estudio aportado por la comunidad.
+
+---
+
+### 📝 Resúmenes y Apuntes
+*(Aún no hay apuntes subidos. ¡Sé el primero en aportar a través del [Buzón](/buzon/)!)*
+
+### 📝 Certámenes Pasados
+*(Espacio para pautas y certámenes anteriores)*
