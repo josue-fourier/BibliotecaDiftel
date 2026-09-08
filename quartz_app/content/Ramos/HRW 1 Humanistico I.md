@@ -1,0 +1,14 @@
+---
+title: "HRW 1 Humanistico I"
+---
+# HRW 1 Humanistico I
+
+Este es el repositorio central para la asignatura de Humanistico I. Aquí encontrarás apuntes, guías y material de estudio aportado por la comunidad.
+
+---
+
+### 📝 Resúmenes y Apuntes
+*(Aún no hay apuntes subidos. ¡Sé el primero en aportar a través del [Buzón](../buzon/)!)*
+
+### 📝 Certámenes Pasados
+*(Espacio para pautas y certámenes anteriores)*
