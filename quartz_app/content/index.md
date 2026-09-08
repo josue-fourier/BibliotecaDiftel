@@ -1,15 +1,29 @@
 ---
 title: Biblioteca Diftel
 ---
-# 👋 Bienvenidos a la Biblioteca Diftel
+# 🚀 Biblioteca Diftel
 
-La **Biblioteca Diftel** es el repositorio oficial de apuntes, guías y certámenes de los estudiantes de Ingeniería Civil Telemática de la USM. Este espacio es mantenido por y para la comunidad, agrupando material académico validado y libre de virus.
+¡Bienvenido al cerebro digital de **Telemática USM**! 🧠⚡
+Este repositorio interactivo agrupa material académico validado para nuestra comunidad.
 
-## 🗺️ Mallas Curriculares
-Para navegar por las asignaturas, puedes explorar los índices por semestre de acuerdo a tu malla curricular:
+---
 
-- [[Malla Nueva]]
-- [[Malla Antigua]]
+## 🗺️ Navega tu Malla
+Explora los recursos ordenados por asignatura:
 
-> [!tip] Aporta al Repositorio
-> Si tienes resúmenes o certámenes pasados, puedes subirlos a través de nuestro [Buzón Seguro](http://127.0.0.1:8080/buzon/). Una vez que tu aporte sea escaneado por nuestro antivirus, será categorizado y añadido a la bóveda por el equipo de DIFTEL.
+* 📚 [[Malla Nueva]]
+* 🏛️ [[Malla Antigua]]
+
+---
+
+## 🤝 Guía de Contribución
+¡El repositorio lo construimos entre todos! Para aportar material (certámenes, resúmenes, laboratorios):
+
+1. **Sube tu material 📤** 
+   Ve al [Buzón Seguro](https://diftel.josnic.cl/buzon/) e identifícate con tu correo USM.
+2. **Prepara tus archivos 📦**
+   Máximo **2 GB** por subida. Si tienes varias fotos o PDFs, comprímelos en un `.zip` o `.rar`.
+3. **Escaneo Automático 🛡️**
+   ClamAV revisará tu archivo en cuarentena. ¡Seguridad ante todo!
+4. **Publicación 🌐**
+   Si está limpio, el equipo Diftel lo categorizará y publicará en la red.
