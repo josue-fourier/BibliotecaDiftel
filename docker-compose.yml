@@ -85,6 +85,13 @@ services:
       clamav:
         condition: service_started
 
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+
 networks:
   red_n8n:
     external: true

@@ -91,7 +91,7 @@ MAILERS = {
         # Por defecto imprime en consola. Si en tu .env pones el backend SMTP, enviará de verdad.
         "BACKEND": config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"),
     },
-    "newsletters": {
+    "buzon-mailer": {
         "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
         "OPTIONS": {
             "host": config("SMTP_HOST", default="smtp.bulk-email-service.example.com"),

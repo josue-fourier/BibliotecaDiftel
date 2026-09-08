@@ -62,7 +62,7 @@ def request_pin(request):
     send_mail(
         "¡Repositorio Telemático!",
         f"Este es tu pin de verificación: {pin}. Tiene 15 minutos de vigencia. Úsalo en el buzón para subir archivos y solicitar su adición.",
-        "jleivap@usm.cl",
+        "josue@buzon-diftel.josnic.cl",
         [email,],
         using=mailer_name
     )
