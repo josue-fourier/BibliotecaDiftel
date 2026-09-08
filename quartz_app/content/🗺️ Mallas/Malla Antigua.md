@@ -25,6 +25,7 @@ Este es el índice de ramos ordenado por semestre. Haz clic en cualquier asignat
 ## Semestre 5
 - [[[FIS130] Fisica]]
 - [[[TEL241] Laboratorio de Redes de Computadores I]]
+- [[INF226 - Análisis y Diseño de Software]]
 ## Semestre 6
 - [[[HCW102] Inglés IIi]]
 - [[[ELO241] Laboratorio de Comunicaciones]]

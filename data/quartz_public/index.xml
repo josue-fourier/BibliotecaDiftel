@@ -6,27 +6,45 @@
       <description>Last 10 notes on Quartz 5</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>recursos</title>
+    <link>https://quartz.jzhao.xyz/recursos/</link>
+    <guid>https://quartz.jzhao.xyz/recursos/</guid>
+    <description><![CDATA[  ]]></description>
+    <pubDate>Tue, 08 Sep 2026 04:14:15 GMT</pubDate>
+  </item><item>
     <title>📚 Ramos</title>
     <link>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/</link>
     <guid>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:11:22 GMT</pubDate>
+    <pubDate>Tue, 08 Sep 2026 04:14:15 GMT</pubDate>
   </item><item>
     <title>🗺️ Mallas</title>
     <link>https://quartz.jzhao.xyz/%F0%9F%97%BA%EF%B8%8F-mallas/</link>
     <guid>https://quartz.jzhao.xyz/%F0%9F%97%BA%EF%B8%8F-mallas/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:11:22 GMT</pubDate>
+    <pubDate>Tue, 08 Sep 2026 04:14:15 GMT</pubDate>
   </item><item>
     <title>Tag Index</title>
     <link>https://quartz.jzhao.xyz/tags/</link>
     <guid>https://quartz.jzhao.xyz/tags/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:11:22 GMT</pubDate>
+    <pubDate>Tue, 08 Sep 2026 04:14:15 GMT</pubDate>
+  </item><item>
+    <title>TEL41526 - Aplicaciones Web y Móviles</title>
+    <link>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/inf226---an%C3%A1lisis-y-dise%C3%B1o-de-software</link>
+    <guid>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/inf226---an%C3%A1lisis-y-dise%C3%B1o-de-software</guid>
+    <description><![CDATA[ [TEL41526] Aplicaciones Web y Móviles Este es el repositorio central para la asignatura de Aplicaciones Web y Móviles. ]]></description>
+    <pubDate>Tue, 08 Sep 2026 04:14:07 GMT</pubDate>
+  </item><item>
+    <title>Resumen Certamen 1</title>
+    <link>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Binf119%5D-programaci%C3%B3n-i/resumen-certamen-1</link>
+    <guid>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Binf119%5D-programaci%C3%B3n-i/resumen-certamen-1</guid>
+    <description><![CDATA[ Resumen Certamen 1 Aquí se incluiría el texto o apuntes del Resumen para el Certamen 1 de Programación I. ]]></description>
+    <pubDate>Tue, 08 Sep 2026 04:11:31 GMT</pubDate>
   </item><item>
     <title>The monolith Strikes Back</title>
-    <link>https://quartz.jzhao.xyz/the-monolith-strikes-back</link>
-    <guid>https://quartz.jzhao.xyz/the-monolith-strikes-back</guid>
+    <link>https://quartz.jzhao.xyz/recursos/the-monolith-strikes-back</link>
+    <guid>https://quartz.jzhao.xyz/recursos/the-monolith-strikes-back</guid>
     <description><![CDATA[ My favorite search engine is Duck Duck Go. Recurso test [The monolith Strikes Back](/recursos/The Monolith Strikes Back.pdf). ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:11:03 GMT</pubDate>
   </item><item>
@@ -46,24 +64,6 @@
     <link>https://quartz.jzhao.xyz/buzon</link>
     <guid>https://quartz.jzhao.xyz/buzon</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:00:51 GMT</pubDate>
-  </item><item>
-    <title>Biblioteca Diftel</title>
-    <link>https://quartz.jzhao.xyz/</link>
-    <guid>https://quartz.jzhao.xyz/</guid>
-    <description><![CDATA[ 👋 Bienvenidos a la Biblioteca Diftel La Biblioteca Diftel es el repositorio oficial de apuntes, guías y certámenes de los estudiantes de Ingeniería Civil Telemática de la USM. ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:00:51 GMT</pubDate>
-  </item><item>
-    <title>[DEW 0] Deportes</title>
-    <link>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Bdew-0%5D-deportes/</link>
-    <guid>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Bdew-0%5D-deportes/</guid>
-    <description><![CDATA[ [DEW 0] Deportes Este es el repositorio central para la asignatura de Deportes. ]]></description>
-    <pubDate>Tue, 08 Sep 2026 04:00:51 GMT</pubDate>
-  </item><item>
-    <title>[DGD72825] Taller Memoria Multidisciplinaria I</title>
-    <link>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Bdgd72825%5D-taller-memoria-multidisciplinaria-i/</link>
-    <guid>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Bdgd72825%5D-taller-memoria-multidisciplinaria-i/</guid>
-    <description><![CDATA[ [DGD72825] Taller Memoria Multidisciplinaria I Este es el repositorio central para la asignatura de Taller Memoria Multidisciplinaria I. ]]></description>
     <pubDate>Tue, 08 Sep 2026 04:00:51 GMT</pubDate>
   </item>
     </channel>

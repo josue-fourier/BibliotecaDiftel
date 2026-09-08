@@ -1,12 +1,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml"><url>
-    <loc>https://quartz.jzhao.xyz/the-monolith-strikes-back</loc>
-    <lastmod>2026-09-08T04:11:03.116Z</lastmod>
-  </url><url>
     <loc>https://quartz.jzhao.xyz/buzon</loc>
     <lastmod>2026-09-08T04:00:51.000Z</lastmod>
   </url><url>
     <loc>https://quartz.jzhao.xyz/</loc>
     <lastmod>2026-09-08T04:00:51.000Z</lastmod>
+  </url><url>
+    <loc>https://quartz.jzhao.xyz/recursos/the-monolith-strikes-back</loc>
+    <lastmod>2026-09-08T04:11:03.116Z</lastmod>
+  </url><url>
+    <loc>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/inf226---an%C3%A1lisis-y-dise%C3%B1o-de-software</loc>
+    <lastmod>2026-09-08T04:14:07.461Z</lastmod>
   </url><url>
     <loc>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Bdew-0%5D-deportes/</loc>
     <lastmod>2026-09-08T04:00:51.000Z</lastmod>
@@ -99,7 +102,7 @@
     <lastmod>2026-09-08T04:00:51.000Z</lastmod>
   </url><url>
     <loc>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Binf119%5D-programaci%C3%B3n-i/resumen-certamen-1</loc>
-    <lastmod>2026-09-08T04:00:51.000Z</lastmod>
+    <lastmod>2026-09-08T04:11:31.000Z</lastmod>
   </url><url>
     <loc>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/%5Binf119%5D-programaci%C3%B3n-i/</loc>
     <lastmod>2026-09-08T04:00:51.000Z</lastmod>
@@ -212,12 +215,15 @@
     <loc>https://quartz.jzhao.xyz/%F0%9F%97%BA%EF%B8%8F-mallas/malla-nueva</loc>
     <lastmod>2026-09-08T04:03:14.000Z</lastmod>
   </url><url>
+    <loc>https://quartz.jzhao.xyz/recursos/</loc>
+    <lastmod>2026-09-08T04:14:15.854Z</lastmod>
+  </url><url>
     <loc>https://quartz.jzhao.xyz/%F0%9F%93%9A-ramos/</loc>
-    <lastmod>2026-09-08T04:11:22.492Z</lastmod>
+    <lastmod>2026-09-08T04:14:15.854Z</lastmod>
   </url><url>
     <loc>https://quartz.jzhao.xyz/%F0%9F%97%BA%EF%B8%8F-mallas/</loc>
-    <lastmod>2026-09-08T04:11:22.492Z</lastmod>
+    <lastmod>2026-09-08T04:14:15.854Z</lastmod>
   </url><url>
     <loc>https://quartz.jzhao.xyz/tags/</loc>
-    <lastmod>2026-09-08T04:11:22.492Z</lastmod>
+    <lastmod>2026-09-08T04:14:15.854Z</lastmod>
   </url></urlset>
