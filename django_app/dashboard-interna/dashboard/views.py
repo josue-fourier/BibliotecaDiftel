@@ -146,12 +146,14 @@ def list_recursos(request):
     files_list = []
     
     if os.path.exists(recursos_dir) and os.path.isdir(recursos_dir):
-        for filename in os.listdir(recursos_dir):
-            filepath = os.path.join(recursos_dir, filename)
-            if os.path.isfile(filepath):
+        for root, dirs, files in os.walk(recursos_dir):
+            for filename in files:
                 # Omitir archivos ocultos
                 if filename.startswith('.'):
                     continue
+                
+                filepath = os.path.join(root, filename)
+                
                 size_bytes = os.path.getsize(filepath)
                 if size_bytes >= 1e9:
                     size_str = f"{size_bytes / 1e9:.2f} GB"
@@ -165,9 +167,12 @@ def list_recursos(request):
                 mod_time = os.path.getmtime(filepath)
                 date_str = datetime.fromtimestamp(mod_time).strftime('%Y-%m-%d')
                 
+                # Obtener la ruta relativa para el nombre y el link
+                rel_path = os.path.relpath(filepath, recursos_dir)
+                
                 files_list.append({
-                    "name": filename,
-                    "url": f"/recursos/{filename}",
+                    "name": rel_path,
+                    "url": f"/recursos/{rel_path}",
                     "size": size_str,
                     "date": date_str
                 })
