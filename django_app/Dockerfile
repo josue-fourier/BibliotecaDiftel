@@ -15,5 +15,3 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r  requirements.txt
 
 COPY dashboard-interna/ /app/
-
-RUN SECRET_KEY="dummy_for_build" POSTGRES_USER="username" POSTGRES_PASSWORD="password" POSTGRES_DB="default_database" POSTGRES_HOST="127.0.0.1" POSTGRES_PORT=5432 python manage.py collectstatic --noinput

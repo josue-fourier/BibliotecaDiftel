@@ -17,9 +17,9 @@ Including another URLconf
 
 from dashboard import views
 from django.conf.urls.i18n import i18n_patterns
-from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("api/v1/indicators", dashboard.views.indicators),
+    path("buzon/api/request-pin", views.request_pin),
+    path("buzon/api/upload", views.upload_file)
 ]

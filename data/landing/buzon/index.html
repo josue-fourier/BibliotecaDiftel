@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buzón Seguro - Biblioteca Diftel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-blue-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold">Buzón Universitario</h1>
+            <p class="text-blue-100 mt-2 text-sm">Sube tus archivos de forma segura para Biblioteca Diftel.</p>
+        </div>
+
+        <div class="p-8">
+            <!-- Alert Box -->
+            <div id="alert-box" class="hidden mb-6 p-4 rounded-lg text-sm font-medium"></div>
+
+            <!-- STEP 1: Request PIN -->
+            <div id="step-1">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">1. Identificación</h2>
+                <form id="form-step-1" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Institucional</label>
+                        <input type="email" id="email" required placeholder="estudiante@sansano.usm.cl"
+                            pattern="^[a-zA-Z0-9._%+\-]+@(sansano\.usm\.cl|usm\.cl)$"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <p class="text-xs text-gray-500 mt-1">Solo dominios @usm.cl o @sansano.usm.cl permitidos.</p>
+                    </div>
+                    <button type="submit" id="btn-step-1"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex justify-center items-center">
+                        <span id="text-step-1">Solicitar PIN</span>
+                        <div id="loader-step-1" class="hidden spinner ml-2"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- STEP 2: Upload File -->
+            <div id="step-2" class="hidden">
+                <h2 class="text-lg font-semibold text-gray-800 mb-4">2. Subir Archivo</h2>
+                <p class="text-sm text-gray-600 mb-4">Hemos enviado un código PIN de 6 dígitos a <strong id="display-email"></strong>.</p>
+                <form id="form-step-2" class="space-y-4">
+                    <div>
+                        <label for="pin" class="block text-sm font-medium text-gray-700 mb-1">Código PIN</label>
+                        <input type="text" id="pin" required placeholder="123456" maxlength="6"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center tracking-widest font-mono text-lg transition-colors">
+                    </div>
+                    <div>
+                        <label for="file" class="block text-sm font-medium text-gray-700 mb-1">Archivo a subir</label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-500 transition-colors bg-gray-50">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600 justify-center">
+                                    <label for="file" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 px-1">
+                                        <span>Seleccionar archivo</span>
+                                        <input id="file" name="file" type="file" class="sr-only" required>
+                                    </label>
+                                </div>
+                                <p class="text-xs text-gray-500" id="file-name-display">Ningún archivo seleccionado</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="btn-step-2"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex justify-center items-center">
+                        <span id="text-step-2">Subir Archivo Seguro</span>
+                        <div id="loader-step-2" class="hidden spinner ml-2"></div>
+                    </button>
+                    <button type="button" id="btn-back" class="w-full text-sm text-gray-500 hover:text-gray-800 text-center mt-2 underline">Volver atrás</button>
+                </form>
+            </div>
+            
+            <!-- Success State -->
+            <div id="step-success" class="hidden text-center py-6">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
+                    <svg class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h2 class="text-xl font-bold text-gray-900 mb-2">¡Archivo Subido!</h2>
+                <p class="text-sm text-gray-600">El archivo ha sido recibido y está siendo analizado por nuestro antivirus. Será publicado una vez validado.</p>
+                <button type="button" onclick="location.reload()" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                    Subir otro archivo
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const stepSuccess = document.getElementById('step-success');
+        
+        const form1 = document.getElementById('form-step-1');
+        const form2 = document.getElementById('form-step-2');
+        
+        const alertBox = document.getElementById('alert-box');
+        const fileInput = document.getElementById('file');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        
+        let userEmail = "";
+
+        // File name update
+        fileInput.addEventListener('change', (e) => {
+            if(e.target.files.length > 0) {
+                fileNameDisplay.textContent = e.target.files[0].name;
+            } else {
+                fileNameDisplay.textContent = "Ningún archivo seleccionado";
+            }
+        });
+
+        function showAlert(msg, type = 'error') {
+            alertBox.textContent = msg;
+            alertBox.className = `mb-6 p-4 rounded-lg text-sm font-medium ${type === 'error' ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'}`;
+            alertBox.classList.remove('hidden');
+        }
+
+        function hideAlert() {
+            alertBox.classList.add('hidden');
+        }
+
+        function setLoading(step, isLoading) {
+            const btn = document.getElementById(`btn-step-${step}`);
+            const text = document.getElementById(`text-step-${step}`);
+            const loader = document.getElementById(`loader-step-${step}`);
+            
+            btn.disabled = isLoading;
+            if(isLoading) {
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+                loader.classList.remove('hidden');
+            } else {
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                loader.classList.add('hidden');
+            }
+        }
+
+        // STEP 1: Request PIN
+        form1.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAlert();
+            userEmail = document.getElementById('email').value;
+            
+            // Regex JS fallback
+            if(!/^[a-zA-Z0-9._%+\-]+@(sansano\.usm\.cl|usm\.cl)$/.test(userEmail)) {
+                showAlert("El correo debe ser @usm.cl o @sansano.usm.cl");
+                return;
+            }
+
+            setLoading(1, true);
+            try {
+                const res = await fetch('/buzon/api/request-pin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                if(!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.detail || "Error al solicitar el PIN");
+                }
+
+                document.getElementById('display-email').textContent = userEmail;
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                
+            } catch (err) {
+                showAlert(err.message);
+            } finally {
+                setLoading(1, false);
+            }
+        });
+
+        // Back button
+        document.getElementById('btn-back').addEventListener('click', () => {
+            hideAlert();
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
+        });
+
+        // STEP 2: Upload File
+        form2.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            hideAlert();
+            
+            const pin = document.getElementById('pin').value;
+            const file = fileInput.files[0];
+
+            if(!file) {
+                showAlert("Por favor selecciona un archivo.");
+                return;
+            }
+
+            setLoading(2, true);
+            try {
+                const formData = new FormData();
+                formData.append('email', userEmail);
+                formData.append('pin', pin);
+                formData.append('file', file);
+
+                const res = await fetch('/buzon/api/upload', {
+                    method: 'POST',
+                    body: formData // Fetch automatically sets multipart/form-data boundary
+                });
+
+                if(!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    throw new Error(data.detail || "Error al subir el archivo o PIN incorrecto");
+                }
+
+                // Success
+                step2.classList.add('hidden');
+                stepSuccess.classList.remove('hidden');
+                
+            } catch (err) {
+                showAlert(err.message);
+            } finally {
+                setLoading(2, false);
+            }
+        });
+    </script>
+</body>
+</html>

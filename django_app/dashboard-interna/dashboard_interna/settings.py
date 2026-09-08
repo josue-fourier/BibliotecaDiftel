@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY", default="unsafe-M0YO4O$!n7V6^x&5*9sY7nP8NAGlV7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1".join(','))
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1").split(',')
 
 
 # Application definition
@@ -39,16 +39,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #"django.middleware.locale.LocaleMiddleware",
 ]
 
-ROOT_URLCONF = "dashboard-interna.urls"
+
+ROOT_URLCONF = "dashboard_interna.urls"
 
 TEMPLATES = [
     {
@@ -58,14 +55,12 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "dashboard-interna.wsgi.application"
+WSGI_APPLICATION = "dashboard_interna.wsgi.application"
 
 
 # Database
@@ -83,39 +78,30 @@ DATABASES = {
 }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = "es-cl"
-
-LOCALE_PATHS = [
-    BASE_DIR / 'locale'
-]
-
 TIME_ZONE = "America/Santiago"
-
 USE_I18N = False
-
 USE_TZ = True
+
+MAILERS = {
+    "default": {
+        # Por defecto imprime en consola. Si en tu .env pones el backend SMTP, enviará de verdad.
+        "BACKEND": config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"),
+    },
+    "newsletters": {
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": config("SMTP_HOST", default="smtp.bulk-email-service.example.com"),
+            "port": config("SMTP_PORT", default=587, cast=int),
+            "username": config("BULK_EMAIL_SERVICE_ACCOUNT_ID", default=""),
+            "password": config("BULK_EMAIL_SERVICE_API_KEY", default=""),
+            "use_tls": config("EMAIL_USE_TLS", default=True, cast=bool),
+        },
+    },
+}
 
 
 # Static files (CSS, JavaScript, Images)
@@ -130,7 +116,7 @@ USE_TZ = True
 # settings.py
 
 # Add your exact domain(s) using HTTPS
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="http://127.0.0.1:8000".join(','))
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="http://127.0.0.1:8000").split(',')
 
 # Tell Django to trust the X-Forwarded-Proto header sent by Nginx/Cloudflare
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
