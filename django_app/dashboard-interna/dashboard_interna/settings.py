@@ -28,6 +28,7 @@ SECRET_KEY = config("SECRET_KEY", default="unsafe-M0YO4O$!n7V6^x&5*9sY7nP8NAGlV7
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1").split(',')
+print(f"ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 
 
 # Application definition
