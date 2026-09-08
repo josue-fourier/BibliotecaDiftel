@@ -21,5 +21,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path("buzon/api/request-pin", views.request_pin),
-    path("buzon/api/upload", views.upload_file)
+    path("buzon/api/upload", views.upload_file),
+    path("buzon/api/recursos", views.list_recursos)
 ]

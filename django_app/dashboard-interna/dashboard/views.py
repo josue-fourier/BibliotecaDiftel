@@ -8,6 +8,7 @@ from multiprocessing import Value
 from random import randrange
 
 from decouple import config
+from django.core.cache import cache
 from django.core.mail import send_mail  # For email sending
 from django.http import HttpResponse, JsonResponse
 from django.utils.timezone import now
@@ -135,3 +136,43 @@ def sanitize_filename(filename):
     filename = os.path.basename(filename)
     safe_name = re.sub(r'[^a-zA-Z0-9_\-\.]', '_', filename)
     return safe_name
+
+def list_recursos(request):
+    cached_data = cache.get("recursos_list")
+    if cached_data:
+        return JsonResponse({"files": cached_data})
+        
+    recursos_dir = "/data/recursos"
+    files_list = []
+    
+    if os.path.exists(recursos_dir) and os.path.isdir(recursos_dir):
+        for filename in os.listdir(recursos_dir):
+            filepath = os.path.join(recursos_dir, filename)
+            if os.path.isfile(filepath):
+                # Omitir archivos ocultos
+                if filename.startswith('.'):
+                    continue
+                size_bytes = os.path.getsize(filepath)
+                if size_bytes >= 1e9:
+                    size_str = f"{size_bytes / 1e9:.2f} GB"
+                elif size_bytes >= 1e6:
+                    size_str = f"{size_bytes / 1e6:.2f} MB"
+                elif size_bytes >= 1e3:
+                    size_str = f"{size_bytes / 1e3:.2f} KB"
+                else:
+                    size_str = f"{size_bytes} B"
+                    
+                mod_time = os.path.getmtime(filepath)
+                date_str = datetime.fromtimestamp(mod_time).strftime('%Y-%m-%d')
+                
+                files_list.append({
+                    "name": filename,
+                    "url": f"/recursos/{filename}",
+                    "size": size_str,
+                    "date": date_str
+                })
+                
+    files_list.sort(key=lambda x: x["date"], reverse=True)
+    cache.set("recursos_list", files_list, 300) # Caché por 5 minutos
+    
+    return JsonResponse({"files": files_list})

@@ -37,6 +37,7 @@ services:
     volumes:
       - ./django_app/dashboard-interna:/app
       - ./data/buzon:/data/buzon
+      - ./data/recursos:/data/recursos:ro
       - ./django_app/static:/app/staticfiles
     depends_on:
       clamav:
