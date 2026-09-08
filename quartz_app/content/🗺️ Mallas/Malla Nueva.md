@@ -1,7 +1,7 @@
 ---
 title: Malla Nueva
 ---
-# 🗺️ Malla Nueva
+# Malla Nueva
 
 Este es el índice de ramos ordenado por semestre. Haz clic en cualquier asignatura para ver sus apuntes y recursos.
 

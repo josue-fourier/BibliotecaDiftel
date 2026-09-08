@@ -1,7 +1,7 @@
 ---
 title: Malla Antigua
 ---
-# 🗺️ Malla Antigua
+# Malla Antigua
 
 Este es el índice de ramos ordenado por semestre. Haz clic en cualquier asignatura para ver sus apuntes y recursos.
 
