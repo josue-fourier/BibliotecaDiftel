@@ -7,7 +7,7 @@ title: Biblioteca Diftel
 > 🏠 [Volver al Inicio](https://diftel.josnic.cl/) | 📤 [Ir al Buzón Seguro](https://diftel.josnic.cl/buzon/)
 
 ¡Bienvenido al cerebro digital de **Telemática SJ**! 🧠⚡
-Este repositorio interactivo agrupa material académico validado para nuestra comunidad.
+Este repositorio colaborativo agrupa material académico validado para nuestra comunidad.
 
 ---
 
@@ -16,17 +16,22 @@ Explora los recursos ordenados por asignatura:
 
 * 📚 [[Malla Nueva]]
 * 🏛️ [[Malla Antigua]]
+* 📁 [[Archivos_Pesados]] (Explorador de archivos listos para usar)
 
 ---
 
-## 🤝 Guía de Contribución
-¡El repositorio lo construimos entre todos! Para aportar material (certámenes, resúmenes, laboratorios):
+## 🤝 ¿Cómo Contribuir?
+¡Tú haces que esta biblioteca crezca! Hay **dos formas** de ayudar:
 
-1. **Sube tu material 📤** 
-   Ve al [Buzón Seguro](https://diftel.josnic.cl/buzon/) e identifícate con tu correo USM.
-2. **Prepara tus archivos 📦**
-   Máximo **2 GB** por subida. Si tienes varias fotos o PDFs, comprímelos en un `.zip` o `.rar`.
-3. **Escaneo Automático 🛡️**
-   ClamAV revisará tu archivo en cuarentena. ¡Seguridad ante todo!
-4. **Publicación 🌐**
-   Si está limpio, el equipo Diftel lo categorizará y publicará en la red.
+### Opción A: Donar Material 📤 (Fácil y Rápido)
+Ideal si tienes pruebas, resúmenes o PDFs pesados:
+1. Sube tu archivo al [Buzón Seguro](https://diftel.josnic.cl/buzon/) (Máx 2 GB, usa `.zip` si son varios).
+2. Nuestro antivirus lo revisará 🛡️.
+3. Si está limpio, ¡el equipo Diftel se encargará del resto!
+
+### Opción B: Escribir y Categorizar Apuntes ✍️ (Modo Pro)
+Ideal si quieres organizar las mallas o crear guías de estudio usando Markdown:
+1. **Clona** nuestro repositorio desde GitHub.
+2. **Usa Obsidian**: Abre la carpeta `quartz_app/content/` como si fuera tu bóveda.
+3. **Edita**: Crea apuntes. Copia los links directos a los PDFs desde la página [[Archivos_Pesados]].
+4. **Publica**: Sube tus cambios a GitHub y abre un **Pull Request**. ¡Lo revisaremos y se subirá automáticamente a la web!
