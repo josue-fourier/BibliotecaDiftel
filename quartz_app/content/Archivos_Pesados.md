@@ -43,8 +43,9 @@ Usa el botón **Copiar Markdown** para pegar el enlace directamente en tus guía
             data.files.forEach(file => {
                 // Link is root-relative (e.g., /recursos/file.pdf). We make it absolute for the markdown to ensure it always works.
                 const absoluteLink = window.location.origin + file.url;
+                const encodedLink = encodeURI(absoluteLink);
                 const basename = file.name.split('/').pop();
-                const markdownText = `[${basename}](${absoluteLink})`;
+                const markdownText = `[${basename}](${encodedLink})`;
                 
                 html += `
                     <tr style="border-bottom: 1px solid #eee;">
