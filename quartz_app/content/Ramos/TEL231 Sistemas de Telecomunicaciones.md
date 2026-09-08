@@ -1,5 +1,5 @@
 ---
-title: "TEL102 Seminario de Programación"
+title: "TEL231 Sistemas de Telecomunicaciones"
 ---
 # TEL231 Sistemas de Telecomunicaciones
 
