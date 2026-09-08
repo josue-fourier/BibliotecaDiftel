@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: es-ES
-  baseUrl: 127.0.0.1:8080/quartz
+  baseUrl: diftel.josnic.cl/quartz
   ignorePatterns:
     - private
     - templates
