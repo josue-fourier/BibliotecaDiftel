@@ -96,14 +96,16 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
 
-  filebrowser:
-    image: filebrowser/filebrowser
+  filegator:
+    image: filegator/filegator
+    container_name: telematica-filegator
+    restart: unless-stopped
     ports:
-      - "1501:80"
+      - "1501:8080"
     volumes:
-      - /srv/data/buzon/safe:/srv/safe
-      - /srv/data/recursos:/srv/recursos
-      - ./filebrowser.db:/database/filebrowser.db
+      - /srv/data/buzon/safe:/var/www/filegator/repository/safe
+      - /srv/data/recursos:/var/www/filegator/repository/recursos
+      - ./data/filegator_private:/var/www/filegator/private
 
   # 5. Docmost (Wiki Colaborativa)
   docmost:
@@ -119,7 +121,7 @@ services:
       - "3000:3000"
     environment:
       APP_URL: ${DOCMOST_APP_URL:-http://localhost:3000}
-      APP_SECRET: ${DOCMOST_APP_SECRET:-replace-me-with-a-strong-secret}
+      APP_SECRET: ${DOCMOST_APP_SECRET:-replace-me-with-a-very-strong-secret-key-that-is-long-enough}
       DATABASE_URL: ${DOCMOST_DATABASE_URL:-postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public}
       REDIS_URL: ${DOCMOST_REDIS_URL:-redis://redis:6379}
     volumes:
