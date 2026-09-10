@@ -71,7 +71,7 @@
                     </a>
                 </div>
                 <div class="md:hidden flex items-center">
-                    <button class="text-gray-600 hover:text-usm-blue focus:outline-none">
+                    <button id="btn-open-menu" class="text-gray-600 hover:text-usm-blue focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     </button>
                 </div>
@@ -79,8 +79,39 @@
         </div>
     </nav>
 
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-gray-900/50 backdrop-blur-sm hidden transition-opacity opacity-0">
+        <div id="mobile-drawer" class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-6 flex justify-between items-center border-b border-gray-100">
+                <span class="font-bold text-usm-blue">Menú</span>
+                <button id="close-menu" class="text-gray-500 hover:text-usm-dark focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6 flex flex-col space-y-6">
+                <a href="/" class="text-gray-700 font-medium hover:text-usm-blue">Inicio</a>
+                <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="text-gray-700 font-medium hover:text-usm-blue">Apuntes</a>
+                <a href="/buzon/" class="text-gray-700 font-medium hover:text-usm-blue">Subir Material</a>
+            </div>
+            <div class="mt-auto p-6 border-t border-gray-100">
+                <p class="text-xs text-gray-400 mb-4 uppercase tracking-wider font-semibold">Redes Sociales</p>
+                <div class="flex gap-4">
+                    <a href="https://instagram.com/telematicausm" target="_blank" title="Telematica USM" class="text-gray-400 hover:text-diftel-cyan transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/diftelusm/" target="_blank" title="DIFTEL USM" class="text-gray-400 hover:text-diftel-cyan transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/ceetel.sj/" target="_blank" title="CEETEL SJ" class="text-gray-400 hover:text-diftel-cyan transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content -->
-    <main class="flex-grow flex items-center justify-center pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+    <main class="flex-grow flex items-center justify-center pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative z-10 w-full overflow-hidden">
         <div class="max-w-lg w-full bg-white/90 backdrop-blur-md rounded-3xl shadow-2xl overflow-hidden border border-white/50 animate-fade-up">
             <!-- Header Section -->
             <div class="bg-usm-blue p-10 text-white text-center relative overflow-hidden">
@@ -92,14 +123,14 @@
                 <p class="text-blue-100 mt-3 text-sm relative z-10 font-medium tracking-wide">Autenticación segura para la comunidad Telemática</p>
             </div>
 
-            <div class="p-8 sm:p-10 relative">
+            <div class="p-6 sm:p-10 relative">
                 <!-- Alert Box -->
                 <div id="alert-box" class="hidden mb-6 p-4 rounded-xl text-sm font-medium border shadow-sm transition-all duration-300 transform scale-95 opacity-0"></div>
 
                 <!-- STEP 1: Request PIN -->
                 <div id="step-1" class="transition-all duration-500 transform">
                     <div class="flex items-center gap-4 mb-8">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 to-diftel-yellow text-usm-dark font-extrabold flex items-center justify-center shadow-md">1</div>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 to-diftel-yellow text-usm-dark font-extrabold flex items-center justify-center shadow-md shrink-0">1</div>
                         <h2 class="text-xl font-bold text-usm-dark">Identificación USM</h2>
                     </div>
                     <form id="form-step-1" class="space-y-6">
@@ -108,8 +139,8 @@
                             <input type="email" id="email" required placeholder="estudiante@sansano.usm.cl"
                                 pattern="^[a-zA-Z0-9._%+\-]+@(sansano\.usm\.cl|usm\.cl)$"
                                 class="input-premium w-full px-5 py-4 rounded-xl text-gray-800 outline-none text-lg placeholder-gray-400 font-medium">
-                            <p class="text-xs text-gray-500 mt-3 flex items-center gap-1.5 font-medium">
-                                <svg class="w-4 h-4 text-diftel-cyan" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                            <p class="text-xs text-gray-500 mt-3 flex items-start sm:items-center gap-1.5 font-medium leading-relaxed">
+                                <svg class="w-4 h-4 text-diftel-cyan shrink-0 mt-0.5 sm:mt-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
                                 Solo dominios @sansano.usm.cl y @usm.cl
                             </p>
                         </div>
@@ -122,9 +153,9 @@
                 </div>
 
                 <!-- STEP 2: Upload File -->
-                <div id="step-2" class="hidden transition-all duration-500 transform translate-x-4 opacity-0 absolute top-10 left-10 right-10">
+                <div id="step-2" class="hidden transition-all duration-500 transform translate-x-4 opacity-0 absolute top-6 sm:top-10 left-6 right-6 sm:left-10 sm:right-10">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-diftel-cyan text-white font-extrabold flex items-center justify-center shadow-md">2</div>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-diftel-cyan text-white font-extrabold flex items-center justify-center shadow-md shrink-0">2</div>
                         <h2 class="text-xl font-bold text-usm-dark">Subir Material</h2>
                     </div>
                     
@@ -149,19 +180,19 @@
                                 💡 Sube 1 solo archivo (PDF, ZIP, etc.). Si tienes varias imágenes, agrúpalas en un archivo comprimido.
                             </p>
                             
-                            <div class="mt-1 flex justify-center px-6 pt-8 pb-8 border-2 border-dashed border-gray-300 rounded-2xl hover:border-diftel-cyan hover:bg-cyan-50/30 transition-all cursor-pointer group bg-gray-50/50" onclick="document.getElementById('file').click()">
+                            <div class="mt-1 flex justify-center px-4 sm:px-6 pt-6 pb-6 sm:pt-8 sm:pb-8 border-2 border-dashed border-gray-300 rounded-2xl hover:border-diftel-cyan hover:bg-cyan-50/30 transition-all cursor-pointer group bg-gray-50/50" onclick="document.getElementById('file').click()">
                                 <div class="space-y-2 text-center transform group-hover:scale-105 transition-transform duration-300">
-                                    <svg class="mx-auto h-14 w-14 text-gray-400 group-hover:text-diftel-cyan transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <svg class="mx-auto h-12 w-12 sm:h-14 sm:w-14 text-gray-400 group-hover:text-diftel-cyan transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                         <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
-                                    <div class="flex text-sm text-gray-600 justify-center">
+                                    <div class="flex flex-col sm:flex-row text-sm text-gray-600 justify-center items-center gap-1">
                                         <label for="file" class="relative cursor-pointer rounded-md font-bold text-usm-blue hover:text-diftel-cyan focus-within:outline-none">
                                             <span>Sube un archivo</span>
                                             <input id="file" name="file" type="file" class="sr-only" required>
                                         </label>
-                                        <p class="pl-1">o arrástralo aquí</p>
+                                        <p class="pl-1 hidden sm:block">o arrástralo aquí</p>
                                     </div>
-                                    <p class="text-xs text-usm-blue font-semibold mt-2" id="file-name-display">Ningún archivo seleccionado</p>
+                                    <p class="text-xs text-usm-blue font-semibold mt-2 break-all px-2" id="file-name-display">Ningún archivo seleccionado</p>
                                 </div>
                             </div>
                         </div>
@@ -180,14 +211,14 @@
                 </div>
                 
                 <!-- Success State -->
-                <div id="step-success" class="hidden text-center py-10 transition-all duration-500 transform translate-y-4 opacity-0 absolute top-10 left-10 right-10">
-                    <div class="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-green-100 mb-8 border-4 border-green-200 shadow-inner">
-                        <svg class="h-12 w-12 text-green-500 animate-fade-up" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div id="step-success" class="hidden text-center py-10 transition-all duration-500 transform translate-y-4 opacity-0 absolute top-6 sm:top-10 left-6 right-6 sm:left-10 sm:right-10">
+                    <div class="mx-auto flex items-center justify-center h-20 w-20 sm:h-24 sm:w-24 rounded-full bg-green-100 mb-8 border-4 border-green-200 shadow-inner">
+                        <svg class="h-10 w-10 sm:h-12 sm:w-12 text-green-500 animate-fade-up" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-extrabold text-usm-dark mb-4">¡Material Recibido!</h2>
-                    <p class="text-gray-600 leading-relaxed mb-10 text-lg font-medium">Tu archivo pasará por nuestro escáner de seguridad antes de publicarse en la Wiki de la comunidad. <br/><span class="text-diftel-cyan font-bold">¡Gracias por aportar!</span></p>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-usm-dark mb-4">¡Material Recibido!</h2>
+                    <p class="text-gray-600 leading-relaxed mb-10 text-base sm:text-lg font-medium px-2">Tu archivo pasará por nuestro escáner de seguridad antes de publicarse en la Wiki de la comunidad. <br/><span class="text-diftel-cyan font-bold">¡Gracias por aportar!</span></p>
                     <button type="button" onclick="location.reload()" class="btn-premium w-full border-2 border-usm-blue text-usm-blue hover:bg-usm-blue hover:text-white font-bold py-4 px-4 rounded-xl shadow-md focus:ring-4 focus:ring-usm-blue/20">
                         Subir otro archivo
                     </button>
@@ -199,12 +230,27 @@
 
     <!-- Footer -->
     <footer class="bg-usm-dark text-white border-t-4 border-diftel-yellow mt-auto relative z-20">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
-            <span class="font-bold text-lg tracking-wider">DIFTEL SJ</span>
-            <p class="text-gray-400 text-sm mt-1 font-medium">Organización de Estudiantes de Ingeniería Civil Telemática</p>
+        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-xl tracking-wide">DIFTEL SJ</span>
+                <p class="text-gray-300 text-sm mt-2 font-medium">Organización de Estudiantes de Ingeniería Civil Telemática</p>
+                <p class="text-gray-400 text-sm mt-1">Universidad Técnica Federico Santa María - Campus San Joaquín</p>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://instagram.com/telematicausm" target="_blank" title="Telematica USM" class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-diftel-cyan hover:text-white transition-all duration-300">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/diftelusm/" target="_blank" title="DIFTEL USM" class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-diftel-cyan hover:text-white transition-all duration-300">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/ceetel.sj/" target="_blank" title="CEETEL SJ" class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-diftel-cyan hover:text-white transition-all duration-300">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+            </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script>
         const step1 = document.getElementById('step-1');
         const step2 = document.getElementById('step-2');
@@ -218,6 +264,42 @@
         const fileNameDisplay = document.getElementById('file-name-display');
         
         let userEmail = "";
+
+        // Drawer Menu Mobile Logic
+        const btnOpen = document.getElementById('btn-open-menu');
+        const btnClose = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+
+        function openMenu() {
+            if(mobileMenu) {
+                mobileMenu.classList.remove('hidden');
+                void mobileMenu.offsetWidth; // Force reflow
+                mobileMenu.classList.remove('opacity-0');
+                mobileDrawer.classList.remove('translate-x-full');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            }
+        }
+
+        function closeMenu() {
+            if(mobileMenu) {
+                mobileMenu.classList.add('opacity-0');
+                mobileDrawer.classList.add('translate-x-full');
+                document.body.style.overflow = ''; // Restore scrolling
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        if(btnOpen) btnOpen.addEventListener('click', openMenu);
+        if(btnClose) btnClose.addEventListener('click', closeMenu);
+        
+        // Close on backdrop click
+        if(mobileMenu) mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) closeMenu();
+        });
+
 
         // Animaciones de transición personalizadas
         function switchSteps(hideStep, showStep) {

@@ -15,6 +15,13 @@
 /* ==========================================================================
    Base y Reseteos Adicionales
    ========================================================================== */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -152,15 +159,19 @@ body {
 }
 .bg-blob-1 {
     background: var(--color-diftel-cyan);
-    width: 400px;
-    height: 400px;
+    width: 40vw;
+    height: 40vw;
+    min-width: 300px;
+    min-height: 300px;
     top: -100px;
     left: -100px;
 }
 .bg-blob-2 {
     background: var(--color-usm-blue);
-    width: 300px;
-    height: 300px;
+    width: 30vw;
+    height: 30vw;
+    min-width: 250px;
+    min-height: 250px;
     bottom: 20%;
     right: -50px;
     animation-delay: 2s;
