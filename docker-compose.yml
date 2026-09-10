@@ -117,8 +117,6 @@ services:
         condition: service_started
       redis:
         condition: service_started
-    ports:
-      - "3000:3000"
     environment:
       APP_URL: ${DOCMOST_APP_URL:-http://localhost:3000}
       APP_SECRET: ${DOCMOST_APP_SECRET:-replace-me-with-a-very-strong-secret-key-that-is-long-enough}
