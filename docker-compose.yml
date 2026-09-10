@@ -100,8 +100,8 @@ services:
     image: ghcr.io/gtsteffaniak/filebrowser:latest
     container_name: telematica-filebrowser
     restart: unless-stopped
-    ports:
-      - "1501:80"
+    environment:
+      - FB_BASEURL=/filebrowser
     volumes:
       - /srv/data/buzon/safe:/srv/safe
       - /srv/data/recursos:/srv/recursos
