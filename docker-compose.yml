@@ -96,16 +96,16 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
 
-  filegator:
-    image: filegator/filegator
-    container_name: telematica-filegator
+  filebrowser:
+    image: ghcr.io/gtsteffaniak/filebrowser:latest
+    container_name: telematica-filebrowser
     restart: unless-stopped
     ports:
-      - "1501:8080"
+      - "1501:80"
     volumes:
-      - /srv/data/buzon/safe:/var/www/filegator/repository/safe
-      - /srv/data/recursos:/var/www/filegator/repository/recursos
-      - ./data/filegator_private:/var/www/filegator/private
+      - /srv/data/buzon/safe:/srv/safe
+      - /srv/data/recursos:/srv/recursos
+      - ./data/filebrowser_data:/home/filebrowser/data
 
   # 5. Docmost (Wiki Colaborativa)
   docmost:
