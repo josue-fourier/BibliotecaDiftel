@@ -6,6 +6,7 @@
     <title>DIFTEL SJ - Difusión Telemática</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
     <script>
         tailwind.config = {
             theme: {
@@ -27,39 +28,35 @@
             }
         }
     </script>
-    <style>
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .gradient-text {
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-image: linear-gradient(to right, #004B87, #00B5E2);
-        }
-    </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800">
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 relative overflow-x-hidden">
+    <!-- Background Blobs -->
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+
     <!-- Navbar (Shared) -->
-    <nav class="glass-nav fixed w-full z-50 top-0 transition-all duration-300">
+    <nav class="glass-nav fixed w-full z-50 top-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-3">
-                    <div class="bg-usm-blue p-2 rounded-lg flex items-center justify-center">
+                <div class="flex items-center gap-3 cursor-pointer transition-transform hover:scale-105 duration-300">
+                    <div class="bg-usm-blue p-2 rounded-lg flex items-center justify-center shadow-lg shadow-usm-blue/30">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                     </div>
                     <a href="/" class="font-extrabold text-xl tracking-tight text-usm-blue uppercase">DIFTEL <span class="text-diftel-yellow">SJ</span></a>
                 </div>
                 <div class="hidden md:flex space-x-8">
                     <a href="/" class="text-usm-blue font-semibold hover:text-diftel-cyan transition-colors">Inicio</a>
-                    <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="text-gray-600 font-medium hover:text-usm-blue transition-colors">Apuntes</a>
-                    <a href="/buzon/" class="text-gray-600 font-medium hover:text-usm-blue transition-colors">Subir Material</a>
+                    <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="text-gray-600 font-medium hover:text-usm-blue transition-colors relative group">
+                        Apuntes
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-diftel-cyan transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="/buzon/" class="text-gray-600 font-medium hover:text-usm-blue transition-colors relative group">
+                        Subir Material
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-diftel-cyan transition-all group-hover:w-full"></span>
+                    </a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button class="text-gray-600 hover:text-usm-blue focus:outline-none">
-                        <!-- Hamburger Icon -->
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     </button>
                 </div>
@@ -68,47 +65,55 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow flex flex-col items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl w-full text-center space-y-12">
+    <main class="flex-grow flex flex-col items-center justify-center pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-5xl w-full text-center space-y-16">
             
             <!-- Hero -->
-            <div class="space-y-6 mt-10">
-                <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-usm-blue font-medium text-sm border border-blue-100 shadow-sm">
-                    <span class="flex h-2 w-2 rounded-full bg-diftel-cyan mr-2"></span>
+            <div class="space-y-8 animate-fade-up">
+                <div class="inline-flex items-center px-5 py-2 rounded-full bg-white/80 backdrop-blur-sm text-usm-blue font-semibold text-sm border border-blue-100 shadow-sm transition-transform hover:scale-105 cursor-default">
+                    <span class="flex h-2.5 w-2.5 rounded-full bg-diftel-cyan mr-3 animate-pulse"></span>
                     Repositorio de Estudiantes de Ingeniería Civil Telemática
                 </div>
-                <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight text-usm-dark leading-tight">
-                    Difusión <span class="gradient-text">Telemática</span>
+                <h1 class="text-6xl sm:text-8xl font-extrabold tracking-tight text-usm-dark leading-tight drop-shadow-sm">
+                    Difusión <br class="sm:hidden" /><span class="gradient-text">Telemática</span>
                 </h1>
-                <p class="mt-4 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed">
+                <p class="mt-6 text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed animate-fade-up delay-100">
                     Un espacio hecho por y para estudiantes. Impulsando la <strong class="text-usm-blue font-semibold">Feria de Proyectos</strong>, Puertas Abiertas y demostrando por qué somos La Universidad STEM de Chile.
                 </p>
             </div>
 
             <!-- Action Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left animate-fade-up delay-200">
                 
                 <!-- Explorar (Wiki Diftel) -->
-                <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="group relative bg-white p-8 rounded-2xl shadow-md border-l-4 border-diftel-cyan hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-cyan-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out z-0"></div>
+                <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="premium-card group relative p-8 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-diftel-cyan/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
                     <div class="relative z-10">
-                        <div class="w-14 h-14 bg-diftel-cyan/10 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-7 h-7 text-diftel-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <div class="w-16 h-16 bg-gradient-to-br from-cyan-50 to-diftel-cyan/20 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:shadow-diftel-cyan/30 transition-all">
+                            <svg class="w-8 h-8 text-diftel-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-usm-dark mb-3">Wiki Diftel</h3>
-                        <p class="text-gray-600 font-medium leading-relaxed">Navega por nuestra red interconectada de apuntes, laboratorios y guías de estudio. Acceso libre para toda la comunidad.</p>
+                        <h3 class="text-3xl font-bold text-usm-dark mb-4 group-hover:text-usm-blue transition-colors">Wiki Diftel</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-lg">Navega por nuestra red interconectada de apuntes, laboratorios y guías de estudio. Acceso libre para toda la comunidad.</p>
+                        
+                        <div class="mt-6 flex items-center text-diftel-cyan font-bold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Explorar Wiki <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
                     </div>
                 </a>
 
                 <!-- Subir (Buzón) -->
-                <a href="/buzon/" class="group relative bg-white p-8 rounded-2xl shadow-md border-l-4 border-diftel-yellow hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-                    <div class="absolute -right-6 -top-6 w-32 h-32 bg-yellow-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-out z-0"></div>
+                <a href="/buzon/" class="premium-card group relative p-8 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-diftel-yellow/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
                     <div class="relative z-10">
-                        <div class="w-14 h-14 bg-diftel-yellow/10 rounded-xl flex items-center justify-center mb-6">
-                            <svg class="w-7 h-7 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        <div class="w-16 h-16 bg-gradient-to-br from-yellow-50 to-diftel-yellow/20 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:shadow-diftel-yellow/30 transition-all">
+                            <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-usm-dark mb-3">Buzón de Aportes</h3>
-                        <p class="text-gray-600 font-medium leading-relaxed">¿Tienes material valioso? Sube tus archivos de forma segura con tu correo institucional y contribuye a la carrera.</p>
+                        <h3 class="text-3xl font-bold text-usm-dark mb-4 group-hover:text-usm-blue transition-colors">Buzón de Aportes</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-lg">¿Tienes material valioso? Sube tus archivos de forma segura con tu correo institucional y contribuye a la carrera.</p>
+                        
+                        <div class="mt-6 flex items-center text-yellow-600 font-bold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Compartir Material <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
                     </div>
                 </a>
 
@@ -117,15 +122,15 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-usm-dark text-white border-t-4 border-diftel-yellow mt-auto">
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+    <footer class="bg-usm-dark text-white border-t-4 border-diftel-yellow mt-auto relative z-20">
+        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-center md:text-left">
-                <span class="font-bold text-lg">DIFTEL SJ</span>
-                <p class="text-gray-400 text-sm mt-1">Organización de Estudiantes de Ingeniería Civil Telemática</p>
-                <p class="text-gray-400 text-sm">Universidad Técnica Federico Santa María - Campus San Joaquín</p>
+                <span class="font-bold text-xl tracking-wide">DIFTEL SJ</span>
+                <p class="text-gray-300 text-sm mt-2 font-medium">Organización de Estudiantes de Ingeniería Civil Telemática</p>
+                <p class="text-gray-400 text-sm mt-1">Universidad Técnica Federico Santa María - Campus San Joaquín</p>
             </div>
             <div class="flex gap-4">
-                <a href="https://instagram.com/telematicausm" target="_blank" class="text-gray-300 hover:text-diftel-cyan transition-colors">
+                <a href="https://instagram.com/telematicausm" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-diftel-cyan hover:text-white transition-all duration-300">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                 </a>
             </div>
