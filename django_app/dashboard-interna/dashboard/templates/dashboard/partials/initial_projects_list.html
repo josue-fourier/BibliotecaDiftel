@@ -1,0 +1,54 @@
+{% if projects %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+    {% for project in projects %}
+    <div class="card bg-base-100 shadow-xl border border-base-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+        <!-- Carrusel de Imágenes -->
+        <div class="carousel w-full h-48 bg-base-200 relative overflow-hidden rounded-t-2xl">
+            {% if project.images.all %}
+                {% for img in project.images.all %}
+                <div id="img{{ project.id }}-{{ forloop.counter }}" class="carousel-item relative w-full h-full">
+                    <img src="{{ img.image.url }}" class="w-full h-full object-cover" alt="Imagen del proyecto {{ project.title }}" loading="lazy" />
+                    <!-- Controles de carrusel nativos si hay más de 1 imagen -->
+                    {% if project.images.count > 1 %}
+                    <div class="absolute flex justify-between transform -translate-y-1/2 left-2 right-2 top-1/2 opacity-0 hover:opacity-100 transition-opacity">
+                        <a href="#img{{ project.id }}-{% if forloop.first %}{{ project.images.count }}{% else %}{{ forloop.counter|add:"-1" }}{% endif %}" class="btn btn-circle btn-sm btn-ghost bg-black/30 text-white">❮</a>
+                        <a href="#img{{ project.id }}-{% if forloop.last %}1{% else %}{{ forloop.counter|add:"1" }}{% endif %}" class="btn btn-circle btn-sm btn-ghost bg-black/30 text-white">❯</a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="flex items-center justify-center w-full h-full text-neutral/40">
+                    <span class="text-sm">Sin imágenes</span>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Contenido de la Tarjeta -->
+        <div class="card-body p-5">
+            <h2 class="card-title text-primary text-xl leading-tight">
+                {{ project.title }}
+            </h2>
+            <div class="badge badge-accent badge-sm mb-2 font-semibold text-neutral">Gen {{ project.generation }}</div>
+            
+            <p class="text-sm text-neutral/80 flex-grow leading-relaxed">
+                {{ project.description|truncatewords:25 }}
+            </p>
+            
+            <div class="divider my-2"></div>
+            
+            <div class="text-xs text-neutral/70">
+                <span class="font-bold block mb-1">Integrantes:</span>
+                {{ project.members|linebreaksbr }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-16 animate-fade-in bg-base-200 rounded-xl">
+    <div class="text-5xl mb-4">📚</div>
+    <h3 class="text-2xl font-bold text-neutral">Sin proyectos</h3>
+    <p class="text-neutral/70 mt-2">No se encontraron proyectos para la generación {{ generation }}.</p>
+</div>
+{% endif %}

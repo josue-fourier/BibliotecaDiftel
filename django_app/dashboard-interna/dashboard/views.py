@@ -11,11 +11,31 @@ from decouple import config
 from django.core.cache import cache
 from django.core.mail import send_mail  # For email sending
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from .models import USMUser
+from .models import USMUser, InitialProject
+
+def initial_projects_view(request):
+    generations = InitialProject.objects.values_list('generation', flat=True).distinct().order_by('-generation')
+    
+    selected_generation = None
+    if generations:
+        selected_generation = generations[0]
+        
+    return render(request, 'dashboard/initial_projects.html', {
+        'generations': generations,
+        'selected_generation': selected_generation
+    })
+
+def initial_projects_list_view(request, generation):
+    projects = InitialProject.objects.filter(generation=generation).prefetch_related('images')
+    return render(request, 'dashboard/partials/initial_projects_list.html', {
+        'projects': projects,
+        'generation': generation
+    })
 
 LOWER_PIN_BOUND = 100000
 UPPER_PIN_BOUND = 999999

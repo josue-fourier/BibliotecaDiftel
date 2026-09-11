@@ -18,9 +18,14 @@ Including another URLconf
 from dashboard import views
 from django.conf.urls.i18n import i18n_patterns
 from django.urls import include, path
+from django.contrib import admin
+from decouple import config
 
 urlpatterns = [
+    path(config('ADMIN_URL', default='admin/').strip('/') + '/', admin.site.urls),
     path("buzon/api/request-pin", views.request_pin),
     path("buzon/api/upload", views.upload_file),
-    path("buzon/api/recursos", views.list_recursos)
+    path("buzon/api/recursos", views.list_recursos),
+    path("proyectos-iniciales/", views.initial_projects_view, name="initial_projects"),
+    path("proyectos-iniciales/generacion/<int:generation>/", views.initial_projects_list_view, name="initial_projects_list"),
 ]
