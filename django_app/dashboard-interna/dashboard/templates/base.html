@@ -15,15 +15,48 @@
 <body class="bg-base-100 text-neutral min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     
     <!-- Navbar Premium Estilo Diftel -->
-    <nav class="navbar bg-white/70 backdrop-blur-md border-b border-white/50 shadow-sm sticky top-0 z-50">
-        <div class="flex-1">
-            <a href="/" class="btn btn-ghost normal-case text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+    <nav class="navbar bg-white/70 backdrop-blur-md border-b border-white/50 shadow-sm sticky top-0 z-50 px-2 sm:px-4">
+        <div class="flex-1 flex items-center">
+            <!-- Mobile Menu Dropdown -->
+            <div class="dropdown md:hidden mr-2">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle btn-sm" aria-label="Abrir menú de navegación">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-50 p-2 shadow-lg bg-base-100 rounded-box w-52 border border-base-200">
+                    <li>
+                        <a href="{% url 'workshops' %}" class="btn btn-ghost btn-sm justify-start font-semibold {% if '/talleres' in request.path %}text-primary hover:text-primary btn-active bg-primary/10{% else %}text-neutral hover:text-primary{% endif %}">
+                            Talleres
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'community' %}" class="btn btn-ghost btn-sm justify-start font-semibold {% if '/comunidad' in request.path %}text-primary hover:text-primary btn-active bg-primary/10{% else %}text-neutral hover:text-primary{% endif %}">
+                            Comunidad
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Brand / Logo -->
+            <a href="/" class="btn btn-ghost normal-case text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mr-4">
                 Biblioteca Diftel Admin
             </a>
+
+            <!-- Desktop Navigation Links -->
+            <div class="hidden md:flex items-center gap-2">
+                <a href="{% url 'workshops' %}" class="btn btn-ghost btn-sm font-semibold {% if '/talleres' in request.path %}text-primary hover:text-primary btn-active bg-primary/10{% else %}text-neutral hover:text-primary{% endif %}">
+                    Talleres
+                </a>
+                <a href="{% url 'community' %}" class="btn btn-ghost btn-sm font-semibold {% if '/comunidad' in request.path %}text-primary hover:text-primary btn-active bg-primary/10{% else %}text-neutral hover:text-primary{% endif %}">
+                    Comunidad
+                </a>
+            </div>
         </div>
+
         <div class="flex-none gap-2">
             {% if user.is_authenticated %}
-                <span class="text-sm font-medium">Hola, {{ user.username }}</span>
+                <span class="text-sm font-medium hidden sm:inline">Hola, {{ user.username }}</span>
                 <a href="{% url 'admin:logout' %}" class="btn btn-sm btn-outline btn-error">Salir</a>
             {% endif %}
         </div>

@@ -353,6 +353,8 @@ class WorkshopViewTests(TestCase):
             self.assertContains(response, '<!DOCTYPE html>')
             self.assertContains(response, 'Biblioteca Diftel Admin')
             self.assertContains(response, 'Talleres Telemáticos')
+            self.assertContains(response, 'href="/talleres/"')
+            self.assertContains(response, 'href="/comunidad/"')
 
     def test_workshops_full_page_view_context_keys(self):
         """GET /talleres/ provides expected context keys: workshops, years, selected_year, etc."""
@@ -695,6 +697,8 @@ class CommunityMemberViewTests(TestCase):
             self.assertContains(response, '<!DOCTYPE html>')
             self.assertContains(response, 'Biblioteca Diftel Admin')
             self.assertContains(response, 'Comunidad Telemática')
+            self.assertContains(response, 'href="/talleres/"')
+            self.assertContains(response, 'href="/comunidad/"')
 
     def test_community_full_page_view_context_keys_and_ordering(self):
         """Context contains expected keys; members ordered by -generation, name."""
@@ -920,6 +924,63 @@ class CommunityMemberViewTests(TestCase):
             self.assertContains(response, 'gap-6')
             self.assertContains(response, 'card')
             self.assertContains(response, 'badge-primary')
+
+
+class NavbarNavigationTests(TestCase):
+    """
+    Automated integration and UI tests for Milestone 4:
+    Frontend Navbar Navigation, DaisyUI styling, and active route highlighting.
+    """
+    def test_navbar_contains_workshops_and_community_links_on_workshops_view(self):
+        """Navbar renders links to /talleres/ and /comunidad/ with Talleres active."""
+        response = self.client.get(reverse('workshops'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<nav class="navbar')
+        self.assertContains(response, 'href="/talleres/"')
+        self.assertContains(response, 'Talleres')
+        self.assertContains(response, 'href="/comunidad/"')
+        self.assertContains(response, 'Comunidad')
+
+    def test_navbar_contains_workshops_and_community_links_on_community_view(self):
+        """Navbar renders links to /talleres/ and /comunidad/ with Comunidad active."""
+        response = self.client.get(reverse('community'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<nav class="navbar')
+        self.assertContains(response, 'href="/talleres/"')
+        self.assertContains(response, 'Talleres')
+        self.assertContains(response, 'href="/comunidad/"')
+        self.assertContains(response, 'Comunidad')
+
+    def test_navbar_contains_workshops_and_community_links_on_initial_projects_view(self):
+        """Navbar renders links to /talleres/ and /comunidad/ on initial projects view."""
+        response = self.client.get(reverse('initial_projects'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<nav class="navbar')
+        self.assertContains(response, 'href="/talleres/"')
+        self.assertContains(response, 'href="/comunidad/"')
+
+    def test_navbar_daisyui_styling_and_responsive_classes(self):
+        """Navbar includes DaisyUI styling classes and responsive desktop/mobile containers."""
+        response = self.client.get(reverse('workshops'))
+        self.assertEqual(response.status_code, 200)
+        # DaisyUI button classes
+        self.assertContains(response, 'btn btn-ghost btn-sm')
+        self.assertContains(response, 'font-semibold')
+        # Desktop and mobile responsive layouts
+        self.assertContains(response, 'dropdown md:hidden')
+        self.assertContains(response, 'hidden md:flex')
+
+    def test_navbar_active_route_highlighting(self):
+        """Active route highlights the corresponding link with text-primary and btn-active."""
+        # When on /talleres/
+        res_workshops = self.client.get(reverse('workshops'))
+        self.assertContains(res_workshops, 'btn-active')
+        self.assertContains(res_workshops, 'text-primary')
+
+        # When on /comunidad/
+        res_community = self.client.get(reverse('community'))
+        self.assertContains(res_community, 'btn-active')
+        self.assertContains(res_community, 'text-primary')
 
 
 
