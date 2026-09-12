@@ -16,8 +16,8 @@ class InitialProject(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Proyecto Inicial"
-        verbose_name_plural = "Proyectos Iniciales"
+        verbose_name = "Proyecto"
+        verbose_name_plural = "Proyectos"
         ordering = ['-generation', '-created_at']
 
     def __str__(self):
