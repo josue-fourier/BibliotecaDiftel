@@ -24,6 +24,7 @@ from django.contrib import admin
 from decouple import config
 
 urlpatterns = [
+    path("", views.landing_view, name="landing"),
     path(config('ADMIN_URL', default='admin/').strip('/') + '/', admin.site.urls),
     path("buzon/api/request-pin", views.request_pin),
     path("buzon/api/upload", views.upload_file),

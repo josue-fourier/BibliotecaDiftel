@@ -18,6 +18,9 @@ from django.views.decorators.http import require_POST
 from django.db.models import Q
 from .models import USMUser, InitialProject, Workshop, EVENT_TYPE_CHOICES, CommunityMember
 
+def landing_view(request):
+    return render(request, 'dashboard/landing.html')
+
 def initial_projects_view(request):
     generations = InitialProject.objects.values_list('generation', flat=True).distinct().order_by('-generation')
     
