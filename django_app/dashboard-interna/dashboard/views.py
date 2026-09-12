@@ -16,7 +16,7 @@ from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from .models import USMUser, InitialProject
+from .models import USMUser, InitialProject, Workshop, EVENT_TYPE_CHOICES
 
 def initial_projects_view(request):
     generations = InitialProject.objects.values_list('generation', flat=True).distinct().order_by('-generation')
@@ -36,6 +36,100 @@ def initial_projects_list_view(request, generation):
         'projects': projects,
         'generation': generation
     })
+
+
+def _parse_year_param(year_val):
+    """Safely parses a year parameter into an integer or None."""
+    if not year_val:
+        return None
+    val_str = str(year_val).strip().lower()
+    if val_str in ('all', 'todos', ''):
+        return None
+    try:
+        val = int(val_str)
+        return val if val > 0 else None
+    except (ValueError, TypeError):
+        return None
+
+
+def workshops_view(request, year=None):
+    """
+    Main view and HTMX partial handler for Talleres Telemáticos.
+    - Full request (request.htmx is False): Renders 'dashboard/workshops.html'.
+    - HTMX request (request.htmx is True): Renders 'dashboard/partials/workshops_list.html'.
+    - Supports year filtering via route kwarg `year` or query param `?year=...`.
+    - Supports optional event type filtering via query param `?type=...` or `?event_type=...`.
+    """
+    # 1. Resolve year filter
+    year_param = year if year is not None else request.GET.get('year')
+    selected_year = _parse_year_param(year_param)
+
+    # 2. Build base queryset with newest-first ordering and prefetched images
+    workshops = Workshop.objects.all().prefetch_related('images').order_by('-year', '-created_at', '-id')
+
+    if selected_year is not None:
+        workshops = workshops.filter(year=selected_year)
+
+    # 3. Optional event_type filter
+    event_type = request.GET.get('event_type') or request.GET.get('type')
+    valid_event_types = dict(EVENT_TYPE_CHOICES)
+    if event_type and event_type in valid_event_types:
+        workshops = workshops.filter(event_type=event_type)
+    else:
+        event_type = None
+
+    # 4. Available years (lazy QuerySet; evaluated only if referenced in template)
+    years = Workshop.objects.values_list('year', flat=True).distinct().order_by('-year')
+
+    # 5. Build context
+    context = {
+        'workshops': workshops,
+        'years': years,
+        'active_year': selected_year,
+        'selected_year': selected_year,
+        'event_types': EVENT_TYPE_CHOICES,
+        'selected_type': event_type,
+    }
+
+    # 6. HTMX detection (supports django_htmx middleware, RequestFactory headers, and ?partial=1)
+    is_htmx = (
+        bool(getattr(request, 'htmx', False))
+        or request.headers.get('HX-Request') == 'true'
+        or request.GET.get('partial') in ('1', 'true', 'True')
+    )
+
+    if is_htmx:
+        return render(request, 'dashboard/partials/workshops_list.html', context)
+    return render(request, 'dashboard/workshops.html', context)
+
+
+def workshops_list_view(request, year=None):
+    """Explicit endpoint that always renders the partial workshops_list.html."""
+    year_param = year if year is not None else request.GET.get('year')
+    selected_year = _parse_year_param(year_param)
+
+    workshops = Workshop.objects.all().prefetch_related('images').order_by('-year', '-created_at', '-id')
+    if selected_year is not None:
+        workshops = workshops.filter(year=selected_year)
+
+    event_type = request.GET.get('event_type') or request.GET.get('type')
+    if event_type and event_type in dict(EVENT_TYPE_CHOICES):
+        workshops = workshops.filter(event_type=event_type)
+    else:
+        event_type = None
+
+    years = Workshop.objects.values_list('year', flat=True).distinct().order_by('-year')
+
+    context = {
+        'workshops': workshops,
+        'years': years,
+        'active_year': selected_year,
+        'selected_year': selected_year,
+        'event_types': EVENT_TYPE_CHOICES,
+        'selected_type': event_type,
+    }
+    return render(request, 'dashboard/partials/workshops_list.html', context)
+
 
 LOWER_PIN_BOUND = 100000
 UPPER_PIN_BOUND = 999999

@@ -30,6 +30,10 @@ urlpatterns = [
     path("buzon/api/recursos", views.list_recursos),
     path("proyectos-iniciales/", views.initial_projects_view, name="initial_projects"),
     path("proyectos-iniciales/generacion/<int:generation>/", views.initial_projects_list_view, name="initial_projects_list"),
+    path("talleres/", views.workshops_view, name="workshops"),
+    path("talleres/year/<int:year>/", views.workshops_view, name="workshops_by_year"),
+    path("talleres/partial/", views.workshops_list_view, name="workshops_list"),
+    path("talleres/partial/year/<int:year>/", views.workshops_list_view, name="workshops_list_by_year"),
 ]
 
 if settings.DEBUG:
