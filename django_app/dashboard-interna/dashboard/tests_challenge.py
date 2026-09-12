@@ -456,14 +456,18 @@ class TestSecurityAndQueryTraps(TestCase):
         not_blank_count = Workshop.objects.exclude(guia_url="").count()
         self.assertEqual(not_blank_count, 2)  # Matches w_null and w_has_url!
 
-        # Trap 3: exclude(guia_url__in=[None, ""]) fails in SQL due to NULL IN (...) evaluating to UNKNOWN!
-        # Thus w_null is NOT excluded!
+        # Trap 3 note: Django ORM translates exclude(guia_url__in=[None, '']) to
+        # WHERE NOT (guia_url IN ('') OR guia_url IS NULL) in PostgreSQL,
+        # which correctly excludes both NULL and blank rows.
         trap_query = list(Workshop.objects.exclude(guia_url__in=[None, ""]))
-        self.assertIn(w_null, trap_query, "SQL NULL three-valued logic causes w_null to survive exclude(guia_url__in=[None, ''])!")
+        self.assertNotIn(w_null, trap_query, "w_null should be excluded from the queryset")
+        self.assertNotIn(w_blank, trap_query, "w_blank should be excluded from the queryset")
+        self.assertIn(w_has_url, trap_query, "w_has_url should remain in the queryset")
 
-        # Correct query to find items with an actual guide requires chaining or Q objects:
+        # Correct query to find items with an actual guide requires chaining excludes:
         correct_query = list(Workshop.objects.exclude(guia_url__isnull=True).exclude(guia_url=""))
         self.assertEqual(correct_query, [w_has_url])
+
 
     def test_primary_image_prefetch_behavior(self):
         # Setup temporary media
