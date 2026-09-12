@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "dashboard/public_base.html" %}
 {% load static %}
 
 {% block title %}Comunidad Telemática - Biblioteca Diftel{% endblock %}
@@ -19,21 +19,24 @@
 
 <!-- Controles de Búsqueda y Filtros -->
 <div class="max-w-4xl mx-auto mb-8 space-y-4">
-    <!-- Barra de Búsqueda con Debounce HTMX -->
+    <!-- Barra de Búsqueda con Debounce HTMX (Rediseñada) -->
     <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <div class="relative w-full sm:max-w-md">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-neutral/40">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="relative w-full sm:max-w-lg group">
+            <!-- Ícono de Lupa -->
+            <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-neutral/40 group-focus-within:text-primary transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
+            
+            <!-- Input Estilizado -->
             <input type="search"
                    id="community-search-input"
                    name="q"
                    value="{{ search_query }}"
                    placeholder="Buscar por nombre, cargo o biografía..."
                    aria-label="Buscar en la comunidad"
-                   class="input input-bordered input-primary w-full pl-10 pr-10 text-sm focus:ring-2 focus:ring-primary/20 shadow-xs"
+                   class="w-full bg-white/80 backdrop-blur-sm border border-neutral/10 text-neutral rounded-full py-3 pl-12 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/30 shadow-sm hover:shadow-md transition-all duration-300"
                    hx-get="{% url 'community' %}"
                    hx-target="#community-container"
                    hx-swap="innerHTML"
@@ -42,12 +45,14 @@
                    hx-indicator="#loading-indicator"
                    hx-push-url="true"
                    autocomplete="off" />
+                   
+            <!-- Botón de Borrar -->
             {% if search_query %}
             <button type="button"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral/40 hover:text-neutral"
+                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-neutral/40 hover:text-error transition-colors"
                     title="Borrar búsqueda"
                     onclick="const input = document.getElementById('community-search-input'); input.value=''; htmx.trigger(input, 'search');">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
@@ -59,7 +64,7 @@
             <select id="generation-select"
                     name="generation"
                     aria-label="Filtrar por generación"
-                    class="select select-bordered select-primary w-full text-sm shadow-xs"
+                    class="select select-bordered select-primary w-full text-sm shadow-xs rounded-full"
                     hx-get="{% url 'community' %}"
                     hx-target="#community-container"
                     hx-swap="innerHTML"
