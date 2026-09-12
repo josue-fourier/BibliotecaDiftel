@@ -11,11 +11,229 @@ from decouple import config
 from django.core.cache import cache
 from django.core.mail import send_mail  # For email sending
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.db.models import Q
+from .models import USMUser, InitialProject, Workshop, EVENT_TYPE_CHOICES, CommunityMember
 
-from .models import USMUser
+def landing_view(request):
+    return render(request, 'dashboard/landing.html')
+
+def initial_projects_view(request):
+    generations = InitialProject.objects.values_list('generation', flat=True).distinct().order_by('-generation')
+    
+    selected_generation = None
+    if generations:
+        selected_generation = generations[0]
+        
+    return render(request, 'dashboard/initial_projects.html', {
+        'generations': generations,
+        'selected_generation': selected_generation
+    })
+
+def initial_projects_list_view(request, generation):
+    projects = InitialProject.objects.filter(generation=generation).prefetch_related('images')
+    return render(request, 'dashboard/partials/initial_projects_list.html', {
+        'projects': projects,
+        'generation': generation
+    })
+
+
+def _parse_year_param(year_val):
+    """Safely parses a year parameter into an integer or None."""
+    if not year_val:
+        return None
+    val_str = str(year_val).strip().lower()
+    if val_str in ('all', 'todos', ''):
+        return None
+    try:
+        val = int(val_str)
+        return val if val > 0 else None
+    except (ValueError, TypeError):
+        return None
+
+
+def workshops_view(request, year=None):
+    """
+    Main view and HTMX partial handler for Talleres Telemáticos.
+    - Full request (request.htmx is False): Renders 'dashboard/workshops.html'.
+    - HTMX request (request.htmx is True): Renders 'dashboard/partials/workshops_list.html'.
+    - Supports year filtering via route kwarg `year` or query param `?year=...`.
+    - Supports optional event type filtering via query param `?type=...` or `?event_type=...`.
+    """
+    # 1. Resolve year filter
+    year_param = year if year is not None else request.GET.get('year')
+    selected_year = _parse_year_param(year_param)
+
+    # 2. Build base queryset with newest-first ordering and prefetched images
+    workshops = Workshop.objects.all().prefetch_related('images').order_by('-year', '-created_at', '-id')
+
+    if selected_year is not None:
+        workshops = workshops.filter(year=selected_year)
+
+    # 3. Optional event_type filter
+    event_type = request.GET.get('event_type') or request.GET.get('type')
+    valid_event_types = dict(EVENT_TYPE_CHOICES)
+    if event_type and event_type in valid_event_types:
+        workshops = workshops.filter(event_type=event_type)
+    else:
+        event_type = None
+
+    # 4. Available years (lazy QuerySet; evaluated only if referenced in template)
+    years = Workshop.objects.values_list('year', flat=True).distinct().order_by('-year')
+
+    # 5. Build context
+    context = {
+        'workshops': workshops,
+        'years': years,
+        'active_year': selected_year,
+        'selected_year': selected_year,
+        'event_types': EVENT_TYPE_CHOICES,
+        'selected_type': event_type,
+    }
+
+    # 6. HTMX detection (supports django_htmx middleware, RequestFactory headers, and ?partial=1)
+    is_htmx = (
+        bool(getattr(request, 'htmx', False))
+        or request.headers.get('HX-Request') == 'true'
+        or request.GET.get('partial') in ('1', 'true', 'True')
+    )
+
+    if is_htmx:
+        return render(request, 'dashboard/partials/workshops_list.html', context)
+    return render(request, 'dashboard/workshops.html', context)
+
+
+def workshops_list_view(request, year=None):
+    """Explicit endpoint that always renders the partial workshops_list.html."""
+    year_param = year if year is not None else request.GET.get('year')
+    selected_year = _parse_year_param(year_param)
+
+    workshops = Workshop.objects.all().prefetch_related('images').order_by('-year', '-created_at', '-id')
+    if selected_year is not None:
+        workshops = workshops.filter(year=selected_year)
+
+    event_type = request.GET.get('event_type') or request.GET.get('type')
+    if event_type and event_type in dict(EVENT_TYPE_CHOICES):
+        workshops = workshops.filter(event_type=event_type)
+    else:
+        event_type = None
+
+    years = Workshop.objects.values_list('year', flat=True).distinct().order_by('-year')
+
+    context = {
+        'workshops': workshops,
+        'years': years,
+        'active_year': selected_year,
+        'selected_year': selected_year,
+        'event_types': EVENT_TYPE_CHOICES,
+        'selected_type': event_type,
+    }
+    return render(request, 'dashboard/partials/workshops_list.html', context)
+
+
+# -----------------------------------------------------------------------------
+# Milestone 3: Comunidad Telemática (Directorio de Alumnos & Egresados)
+# -----------------------------------------------------------------------------
+def _parse_generation_param(gen_val):
+    """Safely parses a generation parameter into an integer or None."""
+    if not gen_val:
+        return None
+    val_str = str(gen_val).strip().lower()
+    if val_str in ('all', 'todos', 'todas', ''):
+        return None
+    try:
+        val = int(val_str)
+        return val if val > 0 else None
+    except (ValueError, TypeError):
+        return None
+
+
+def community_view(request, generation=None):
+    """
+    Main view and HTMX handler for Comunidad Telemática.
+    - Full request (request.htmx is False): Renders 'dashboard/community.html'.
+    - HTMX request (request.htmx is True): Renders 'dashboard/partials/community_list.html'.
+    - Supports generation filtering via route kwarg `generation` or query param `?generation=...`.
+    - Supports search query via `?q=...` or `?search=...` (name, current_role, bio).
+    """
+    # 1. Resolve generation filter
+    gen_param = generation if generation is not None else (request.GET.get('generation') or request.GET.get('gen'))
+    selected_generation = _parse_generation_param(gen_param)
+
+    # 2. Resolve search query
+    search_query = (request.GET.get('q') or request.GET.get('search') or '').strip()
+
+    # 3. Build queryset with model ordering ('-generation', 'name', 'id')
+    members = CommunityMember.objects.all()
+
+    if selected_generation is not None:
+        members = members.filter(generation=selected_generation)
+
+    if search_query:
+        members = members.filter(
+            Q(name__icontains=search_query) |
+            Q(current_role__icontains=search_query) |
+            Q(bio__icontains=search_query)
+        )
+
+    # 4. Available generations for filter pills/dropdown
+    generations = CommunityMember.objects.values_list('generation', flat=True).distinct().order_by('-generation')
+
+    # 5. Build context
+    context = {
+        'members': members,
+        'generations': generations,
+        'selected_generation': selected_generation,
+        'active_generation': selected_generation,
+        'search_query': search_query,
+        'total_count': members.count(),
+    }
+
+    # 6. HTMX detection
+    is_htmx = (
+        bool(getattr(request, 'htmx', False))
+        or request.headers.get('HX-Request') == 'true'
+        or request.GET.get('partial') in ('1', 'true', 'True')
+    )
+
+    if is_htmx:
+        return render(request, 'dashboard/partials/community_list.html', context)
+    return render(request, 'dashboard/community.html', context)
+
+
+def community_list_view(request, generation=None):
+    """Explicit endpoint that always renders the partial community_list.html."""
+    gen_param = generation if generation is not None else (request.GET.get('generation') or request.GET.get('gen'))
+    selected_generation = _parse_generation_param(gen_param)
+    search_query = (request.GET.get('q') or request.GET.get('search') or '').strip()
+
+    members = CommunityMember.objects.all()
+    if selected_generation is not None:
+        members = members.filter(generation=selected_generation)
+
+    if search_query:
+        members = members.filter(
+            Q(name__icontains=search_query) |
+            Q(current_role__icontains=search_query) |
+            Q(bio__icontains=search_query)
+        )
+
+    generations = CommunityMember.objects.values_list('generation', flat=True).distinct().order_by('-generation')
+
+    context = {
+        'members': members,
+        'generations': generations,
+        'selected_generation': selected_generation,
+        'active_generation': selected_generation,
+        'search_query': search_query,
+        'total_count': members.count(),
+    }
+    return render(request, 'dashboard/partials/community_list.html', context)
+
+
 
 LOWER_PIN_BOUND = 100000
 UPPER_PIN_BOUND = 999999

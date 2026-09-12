@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Proyectos Iniciales - Biblioteca Diftel{% endblock %}
+
+{% block content %}
+<div class="mb-8 text-center">
+    <h1 class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-4">
+        Proyectos Iniciales
+    </h1>
+    <p class="text-lg opacity-80 max-w-2xl mx-auto">
+        Galería de proyectos de Introducción a la Ingeniería (Proyecto Inicial). Explora los trabajos desarrollados por estudiantes de primer año ordenados por generación.
+    </p>
+</div>
+
+<!-- Selector de Generación -->
+<div class="flex justify-center flex-wrap gap-2 mb-8">
+    {% for gen in generations %}
+        <button class="btn {% if gen == selected_generation %}btn-primary{% else %}btn-outline btn-primary{% endif %} shadow-sm hover:shadow-md transition-shadow"
+                hx-get="{% url 'initial_projects_list' gen %}"
+                hx-target="#projects-container"
+                hx-swap="innerHTML"
+                hx-indicator="#loading-indicator"
+                onclick="document.querySelectorAll('.btn-gen').forEach(b => b.classList.replace('btn-primary', 'btn-outline')); this.classList.replace('btn-outline', 'btn-primary');">
+            Generación {{ gen }}
+        </button>
+    {% empty %}
+        <p class="text-neutral/60 italic">Aún no hay proyectos registrados.</p>
+    {% endfor %}
+</div>
+
+<!-- Indicador de Carga HTMX -->
+<div id="loading-indicator" class="htmx-indicator flex justify-center py-10">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+</div>
+
+<!-- Contenedor Dinámico de Proyectos -->
+<div id="projects-container" class="transition-opacity duration-300">
+    {% if selected_generation %}
+        <div hx-get="{% url 'initial_projects_list' selected_generation %}" hx-trigger="load">
+            <div class="flex justify-center py-10">
+                <span class="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    .htmx-indicator {
+        display: none;
+    }
+    .htmx-request .htmx-indicator {
+        display: flex;
+    }
+    .htmx-request.htmx-indicator {
+        display: flex;
+    }
+</style>
+{% endblock %}

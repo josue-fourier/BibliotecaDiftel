@@ -1,0 +1,73 @@
+{% extends "dashboard/public_base.html" %}
+{% load static %}
+
+{% block title %}Talleres Telemáticos - Biblioteca Diftel{% endblock %}
+
+{% block content %}
+<!-- Encabezado Principal -->
+<div class="mb-8 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+        <span>Comunidad & Formación Técnica</span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-4 tracking-tight">
+        Talleres Telemáticos
+    </h1>
+    <p class="text-base sm:text-lg text-neutral/80 max-w-2xl mx-auto leading-relaxed">
+        Registro histórico de talleres prácticos, charlas técnicas y conferencias organizadas por y para la comunidad de Ingeniería Civil Telemática UTFSM.
+    </p>
+</div>
+
+<!-- Selector de Año (Filtro HTMX) -->
+<div class="flex justify-center flex-wrap gap-2 mb-8" role="group" aria-label="Filtro por año de realización">
+    <!-- Opción 'Todos los años' -->
+    <button class="btn btn-sm sm:btn-md btn-year {% if not selected_year or selected_year == 'all' %}btn-primary text-white{% else %}btn-outline btn-primary{% endif %} shadow-xs hover:shadow-md transition-all duration-200"
+            hx-get="{% url 'workshops' %}"
+            hx-target="#workshops-container"
+            hx-swap="innerHTML"
+            hx-indicator="#loading-indicator"
+            hx-push-url="true"
+            onclick="document.querySelectorAll('.btn-year').forEach(b => { b.classList.remove('btn-primary', 'text-white'); b.classList.add('btn-outline'); }); this.classList.remove('btn-outline'); this.classList.add('btn-primary', 'text-white');">
+        Todos los años
+    </button>
+
+    <!-- Opciones individuales por año -->
+    {% for y in years %}
+    <button class="btn btn-sm sm:btn-md btn-year {% if selected_year|stringformat:'s' == y|stringformat:'s' %}btn-primary text-white{% else %}btn-outline btn-primary{% endif %} shadow-xs hover:shadow-md transition-all duration-200"
+            hx-get="{% url 'workshops' %}?year={{ y }}"
+            hx-target="#workshops-container"
+            hx-swap="innerHTML"
+            hx-indicator="#loading-indicator"
+            hx-push-url="true"
+            onclick="document.querySelectorAll('.btn-year').forEach(b => { b.classList.remove('btn-primary', 'text-white'); b.classList.add('btn-outline'); }); this.classList.remove('btn-outline'); this.classList.add('btn-primary', 'text-white');">
+        {{ y }}
+    </button>
+    {% empty %}
+    <p class="text-neutral/60 italic text-sm">No hay años disponibles registrados.</p>
+    {% endfor %}
+</div>
+
+<!-- Indicador de Carga HTMX -->
+<div id="loading-indicator" class="htmx-indicator flex justify-center py-10">
+    <div class="flex flex-col items-center gap-2">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+        <span class="text-xs font-medium text-neutral/60">Cargando actividades...</span>
+    </div>
+</div>
+
+<!-- Contenedor Dinámico de Talleres -->
+<div id="workshops-container" class="transition-opacity duration-300">
+    {% include "dashboard/partials/workshops_list.html" %}
+</div>
+
+<style>
+    .htmx-indicator {
+        display: none;
+    }
+    .htmx-request .htmx-indicator {
+        display: flex;
+    }
+    .htmx-request.htmx-indicator {
+        display: flex;
+    }
+</style>
+{% endblock %}

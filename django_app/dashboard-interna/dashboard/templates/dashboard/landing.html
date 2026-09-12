@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIFTEL SJ - Difusión Telemática</title>
+    <meta name="description" content="Repositorio de estudiantes de Ingeniería Civil Telemática USM. Apuntes, proyectos, talleres y comunidad telemática.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        usm: {
+                            blue: '#004B87',
+                            dark: '#00335c',
+                        },
+                        diftel: {
+                            yellow: '#FFB81C',
+                            cyan: '#00B5E2',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 relative">
+    <!-- Background Blobs -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="bg-blob bg-blob-1"></div>
+        <div class="bg-blob bg-blob-2"></div>
+    </div>
+
+    {% include "dashboard/includes/navbar.html" %}
+
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center pt-32 pb-12 px-4 sm:px-6 lg:px-8 relative z-10 w-full overflow-hidden">
+        <div class="max-w-5xl w-full text-center space-y-16">
+            
+            <!-- Hero -->
+            <div class="space-y-8 animate-fade-up">
+                <div class="inline-flex items-center px-4 py-2 sm:px-5 sm:py-2 rounded-full bg-white/80 backdrop-blur-sm text-usm-blue font-semibold text-xs sm:text-sm border border-blue-100 shadow-sm transition-transform hover:scale-105 cursor-default mx-auto max-w-full">
+                    <span class="flex h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-diftel-cyan mr-2 sm:mr-3 animate-pulse shrink-0"></span>
+                    <span class="truncate">Repositorio de Estudiantes de Ingeniería Civil Telemática</span>
+                </div>
+                <h1 class="text-5xl sm:text-6xl md:text-8xl font-extrabold tracking-tight text-usm-dark leading-tight drop-shadow-sm break-words px-2">
+                    Difusión <br class="sm:hidden" /><span class="gradient-text">Telemática</span>
+                </h1>
+                <p class="mt-6 text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto font-light leading-relaxed animate-fade-up delay-100 px-2">
+                    Un espacio hecho por y para estudiantes. Impulsando la <strong class="text-usm-blue font-semibold">Feria de Proyectos</strong>, Puertas Abiertas y demostrando por qué somos La Universidad STEM de Chile.
+                </p>
+            </div>
+
+            <!-- Action Cards: fila 1 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-16 text-left animate-fade-up delay-200 px-2">
+                
+                <!-- Explorar (Wiki Diftel) -->
+                <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="premium-card group relative p-6 md:p-8 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-diftel-cyan/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-cyan-50 to-diftel-cyan/20 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:shadow-diftel-cyan/30 transition-all">
+                            <svg class="w-7 h-7 md:w-8 md:h-8 text-diftel-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-usm-dark mb-4 group-hover:text-usm-blue transition-colors">Wiki Diftel</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-base md:text-lg">Navega por nuestra red interconectada de apuntes, laboratorios y guías de estudio. Acceso libre para toda la comunidad.</p>
+                        <div class="mt-6 flex items-center text-diftel-cyan font-bold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Explorar Wiki <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Subir (Buzón) -->
+                <a href="/buzon/" class="premium-card group relative p-6 md:p-8 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-diftel-yellow/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-yellow-50 to-diftel-yellow/20 rounded-2xl flex items-center justify-center mb-6 shadow-inner group-hover:shadow-diftel-yellow/30 transition-all">
+                            <svg class="w-7 h-7 md:w-8 md:h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-bold text-usm-dark mb-4 group-hover:text-usm-blue transition-colors">Buzón de Aportes</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-base md:text-lg">¿Tienes material valioso? Sube tus archivos de forma segura con tu correo institucional y contribuye a la carrera.</p>
+                        <div class="mt-6 flex items-center text-yellow-600 font-bold opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Compartir Material <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Action Cards: fila 2 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-6 text-left animate-fade-up delay-300 px-2">
+
+                <!-- Proyectos Iniciales -->
+                <a href="/proyectos-iniciales/" class="premium-card group relative p-6 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-usm-blue/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-gradient-to-br from-blue-50 to-usm-blue/20 rounded-2xl flex items-center justify-center mb-5 shadow-inner group-hover:shadow-usm-blue/30 transition-all">
+                            <svg class="w-7 h-7 text-usm-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-usm-dark mb-3 group-hover:text-usm-blue transition-colors">Proyectos Iniciales</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-sm">Galería de proyectos de primer año, ordenada por generación con fotos e integrantes.</p>
+                        <div class="mt-5 flex items-center text-usm-blue font-bold text-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Ver Proyectos <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Talleres Telemáticos -->
+                <a href="/talleres/" class="premium-card group relative p-6 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-diftel-cyan/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-gradient-to-br from-cyan-50 to-diftel-cyan/20 rounded-2xl flex items-center justify-center mb-5 shadow-inner group-hover:shadow-diftel-cyan/30 transition-all">
+                            <svg class="w-7 h-7 text-diftel-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-usm-dark mb-3 group-hover:text-usm-blue transition-colors">Talleres Telemáticos</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-sm">Registro fotográfico y guías de los talleres y charlas organizados por la comunidad.</p>
+                        <div class="mt-5 flex items-center text-diftel-cyan font-bold text-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Ver Talleres <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Comunidad Telemática -->
+                <a href="/comunidad/" class="premium-card group relative p-6 rounded-3xl overflow-hidden block">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-diftel-yellow/10 rounded-full group-hover:scale-[2.5] transition-transform duration-700 ease-out z-0"></div>
+                    <div class="relative z-10">
+                        <div class="w-14 h-14 bg-gradient-to-br from-yellow-50 to-diftel-yellow/20 rounded-2xl flex items-center justify-center mb-5 shadow-inner group-hover:shadow-diftel-yellow/30 transition-all">
+                            <svg class="w-7 h-7 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-usm-dark mb-3 group-hover:text-usm-blue transition-colors">Comunidad Telemática</h3>
+                        <p class="text-gray-600 font-medium leading-relaxed text-sm">Conoce a egresados y miembros de nuestra comunidad. Filtra por generación y conéctate.</p>
+                        <div class="mt-5 flex items-center text-yellow-600 font-bold text-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                            Ver Comunidad <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    {% include "dashboard/includes/footer.html" %}
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Biblioteca Diftel{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Repositorio de estudiantes de Ingeniería Civil Telemática USM.{% endblock %}">
+
+    <!-- Tailwind CDN (mismo config que landing) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        usm:    { blue: '#004B87', dark: '#00335c' },
+                        diftel: { yellow: '#FFB81C', cyan: '#00B5E2' },
+                        primary: '#004B87',
+                        secondary: '#00B5E2',
+                        neutral: '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS landing (glassmorphism, blobs, etc.) -->
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+
+    <!-- HTMX -->
+    <script src="{% static 'js/htmx.min.js' %}" defer></script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans text-gray-800 relative"
+      hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <!-- Background Blobs (igual que la landing) -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="bg-blob bg-blob-1"></div>
+        <div class="bg-blob bg-blob-2"></div>
+    </div>
+
+    <!-- Navbar compartida -->
+    {% include "dashboard/includes/navbar.html" %}
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow relative z-10 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer compartido -->
+    {% include "dashboard/includes/footer.html" %}
+
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

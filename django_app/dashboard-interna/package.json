@@ -1,0 +1,19 @@
+{
+  "name": "dashboard-interna-frontend",
+  "version": "1.0.0",
+  "description": "Frontend dependencies for Biblioteca Diftel Django backend",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss -i ./dashboard/static/src/input.css -o ./dashboard/static/css/output.css",
+    "watch": "tailwindcss -i ./dashboard/static/src/input.css -o ./dashboard/static/css/output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.20",
+    "daisyui": "^4.12.10",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
+  }
+}

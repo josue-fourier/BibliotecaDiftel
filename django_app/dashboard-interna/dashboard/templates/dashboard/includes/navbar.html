@@ -1,0 +1,99 @@
+{% load static %}
+<!-- Navbar Diftel SJ -->
+<nav class="glass-nav fixed w-full z-50 top-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-usm-blue p-2 rounded-lg flex items-center justify-center shadow-lg shadow-usm-blue/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <a href="/" class="font-extrabold text-xl tracking-tight text-usm-blue uppercase hover:opacity-80 transition-opacity">DIFTEL <span class="text-diftel-yellow">SJ</span></a>
+            </div>
+            <!-- Desktop Links -->
+            <div class="hidden md:flex space-x-1">
+                <a href="/" class="px-3 py-2 text-usm-blue font-semibold hover:text-diftel-cyan transition-colors text-sm">Inicio</a>
+                <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="px-3 py-2 text-gray-600 font-medium hover:text-usm-blue transition-colors relative group text-sm">
+                    Apuntes<span class="absolute bottom-1 left-3 right-3 h-0.5 bg-diftel-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="/proyectos-iniciales/" class="px-3 py-2 font-medium transition-colors relative group text-sm {% if '/proyectos-iniciales' in request.path %}text-usm-blue font-semibold{% else %}text-gray-600 hover:text-usm-blue{% endif %}">
+                    Proyectos<span class="absolute bottom-1 left-3 right-3 h-0.5 bg-diftel-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="/talleres/" class="px-3 py-2 font-medium transition-colors relative group text-sm {% if '/talleres' in request.path %}text-usm-blue font-semibold{% else %}text-gray-600 hover:text-usm-blue{% endif %}">
+                    Talleres<span class="absolute bottom-1 left-3 right-3 h-0.5 bg-diftel-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="/comunidad/" class="px-3 py-2 font-medium transition-colors relative group text-sm {% if '/comunidad' in request.path %}text-usm-blue font-semibold{% else %}text-gray-600 hover:text-usm-blue{% endif %}">
+                    Comunidad<span class="absolute bottom-1 left-3 right-3 h-0.5 bg-diftel-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+                <a href="/buzon/" class="px-3 py-2 text-gray-600 font-medium hover:text-usm-blue transition-colors relative group text-sm">
+                    Subir Material<span class="absolute bottom-1 left-3 right-3 h-0.5 bg-diftel-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                </a>
+            </div>
+            <!-- Hamburger -->
+            <button id="btn-open-menu" class="md:hidden text-gray-600 hover:text-usm-blue focus:outline-none" aria-label="Abrir menú">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div id="mobile-menu" class="fixed inset-0 z-[60] bg-gray-900/50 backdrop-blur-sm hidden transition-opacity opacity-0">
+    <div id="mobile-drawer" class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-6 flex justify-between items-center border-b border-gray-100">
+            <span class="font-bold text-usm-blue">Menú</span>
+            <button id="close-menu" class="text-gray-500 hover:text-usm-dark focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="p-6 flex flex-col space-y-5">
+            <a href="/" class="text-gray-700 font-medium hover:text-usm-blue transition-colors">Inicio</a>
+            <a target="_blank" href="https://wiki-diftel.josnic.cl/share/x82bmjt0f4/p/biblioteca-diftel-iINlC7wT9n" class="text-gray-700 font-medium hover:text-usm-blue transition-colors">Apuntes</a>
+            <a href="/proyectos-iniciales/" class="{% if '/proyectos-iniciales' in request.path %}text-usm-blue font-semibold{% else %}text-gray-700 font-medium hover:text-usm-blue{% endif %} transition-colors">Proyectos Iniciales</a>
+            <a href="/talleres/" class="{% if '/talleres' in request.path %}text-usm-blue font-semibold{% else %}text-gray-700 font-medium hover:text-usm-blue{% endif %} transition-colors">Talleres</a>
+            <a href="/comunidad/" class="{% if '/comunidad' in request.path %}text-usm-blue font-semibold{% else %}text-gray-700 font-medium hover:text-usm-blue{% endif %} transition-colors">Comunidad</a>
+            <a href="/buzon/" class="text-gray-700 font-medium hover:text-usm-blue transition-colors">Subir Material</a>
+        </div>
+        <div class="mt-auto p-6 border-t border-gray-100">
+            <p class="text-xs text-gray-400 mb-4 uppercase tracking-wider font-semibold">Redes Sociales</p>
+            <div class="flex flex-col gap-3">
+                <a href="https://instagram.com/telematicausm" target="_blank" class="flex items-center gap-3 text-gray-600 hover:text-diftel-cyan transition-colors text-sm font-medium">
+                    <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    @telematicausm
+                </a>
+                <a href="https://www.instagram.com/diftelusm/" target="_blank" class="flex items-center gap-3 text-gray-600 hover:text-diftel-cyan transition-colors text-sm font-medium">
+                    <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    @diftelusm
+                </a>
+                <a href="https://www.instagram.com/ceetel.sj/" target="_blank" class="flex items-center gap-3 text-gray-600 hover:text-diftel-cyan transition-colors text-sm font-medium">
+                    <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    @ceetel.sj
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const btnOpen = document.getElementById('btn-open-menu');
+    const btnClose = document.getElementById('close-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    function openMenu() {
+        mobileMenu.classList.remove('hidden');
+        void mobileMenu.offsetWidth;
+        mobileMenu.classList.remove('opacity-0');
+        mobileDrawer.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+        mobileMenu.classList.add('opacity-0');
+        mobileDrawer.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+        setTimeout(() => { mobileMenu.classList.add('hidden'); }, 300);
+    }
+    if(btnOpen) btnOpen.addEventListener('click', openMenu);
+    if(btnClose) btnClose.addEventListener('click', closeMenu);
+    if(mobileMenu) mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) closeMenu(); });
+})();
+</script>
