@@ -49,25 +49,32 @@ EVENT_TYPE_CHOICES = [
 class Workshop(models.Model):
     title = models.CharField(max_length=200, verbose_name="Título del Taller")
     description = models.TextField(verbose_name="Descripción")
-    year = models.IntegerField(verbose_name="Año de Realización", db_index=True)
+    year = models.IntegerField(
+        verbose_name="Año de Realización",
+        db_index=True,
+        validators=[MinValueValidator(1990), MaxValueValidator(2100)]
+    )
     event_type = models.CharField(
         max_length=50,
         choices=EVENT_TYPE_CHOICES,
         default='taller',
         verbose_name="Tipo de Evento"
     )
+    guia_url = models.URLField(max_length=255, blank=True, null=True, verbose_name="URL Guía Escrita")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Taller Telemático"
         verbose_name_plural = "Talleres Telemáticos"
-        ordering = ['-year', '-created_at']
+        ordering = ['-year', '-created_at', '-id']
 
     def __str__(self):
         return f"{self.title} ({self.year})"
 
     @property
     def primary_image(self):
+        if not self.pk:
+            return None
         return self.images.first()
 
 
@@ -93,18 +100,23 @@ class WorkshopImage(models.Model):
 
 class CommunityMember(models.Model):
     name = models.CharField(max_length=200, verbose_name="Nombre Completo")
-    generation = models.IntegerField(verbose_name="Generación (Año de Egreso)", db_index=True)
+    generation = models.IntegerField(
+        verbose_name="Generación (Año de Egreso)",
+        db_index=True,
+        validators=[MinValueValidator(1990), MaxValueValidator(2100)]
+    )
     bio = models.TextField(verbose_name="Biografía")
     current_role = models.CharField(max_length=200, blank=True, verbose_name="Rol o Cargo Actual")
     linkedin_url = models.URLField(max_length=255, blank=True, verbose_name="LinkedIn")
     github_url = models.URLField(max_length=255, blank=True, verbose_name="GitHub")
     email = models.EmailField(blank=True, verbose_name="Correo de Contacto")
+    profile_picture = models.ImageField(upload_to='community/profile_pics/', blank=True, null=True, verbose_name="Foto de Perfil")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Miembro de la Comunidad"
         verbose_name_plural = "Comunidad y Exalumnos"
-        ordering = ['-generation', 'name']
+        ordering = ['-generation', 'name', 'id']
 
     def __str__(self):
         return f"{self.name} ({self.generation})"

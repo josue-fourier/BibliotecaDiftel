@@ -228,3 +228,8 @@ data/recursos/
 clamav_data/
 data/filebrowser_data/*
 !data/filebrowser_data/config.yaml
+
+# Node & Frontend
+node_modules/
+package-lock.json
+django_app/dashboard-interna/dashboard/static/css/output.css

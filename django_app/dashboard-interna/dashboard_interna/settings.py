@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import sys
 from email.policy import default
 from pathlib import Path
 
@@ -89,6 +90,14 @@ DATABASES = {
         "PORT": config("POSTGRES_PORT", default="5432")
     }
 }
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
 
 
 # Internationalization

@@ -16,7 +16,9 @@ Including another URLconf
 """
 
 from dashboard import views
+from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls.static import static
 from django.urls import include, path
 from django.contrib import admin
 from decouple import config
@@ -29,3 +31,7 @@ urlpatterns = [
     path("proyectos-iniciales/", views.initial_projects_view, name="initial_projects"),
     path("proyectos-iniciales/generacion/<int:generation>/", views.initial_projects_list_view, name="initial_projects_list"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
