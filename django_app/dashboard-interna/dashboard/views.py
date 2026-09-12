@@ -15,8 +15,8 @@ from django.shortcuts import render
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
-from .models import USMUser, InitialProject, Workshop, EVENT_TYPE_CHOICES
+from django.db.models import Q
+from .models import USMUser, InitialProject, Workshop, EVENT_TYPE_CHOICES, CommunityMember
 
 def initial_projects_view(request):
     generations = InitialProject.objects.values_list('generation', flat=True).distinct().order_by('-generation')
@@ -129,6 +129,107 @@ def workshops_list_view(request, year=None):
         'selected_type': event_type,
     }
     return render(request, 'dashboard/partials/workshops_list.html', context)
+
+
+# -----------------------------------------------------------------------------
+# Milestone 3: Comunidad Telemática (Directorio de Alumnos & Egresados)
+# -----------------------------------------------------------------------------
+def _parse_generation_param(gen_val):
+    """Safely parses a generation parameter into an integer or None."""
+    if not gen_val:
+        return None
+    val_str = str(gen_val).strip().lower()
+    if val_str in ('all', 'todos', 'todas', ''):
+        return None
+    try:
+        val = int(val_str)
+        return val if val > 0 else None
+    except (ValueError, TypeError):
+        return None
+
+
+def community_view(request, generation=None):
+    """
+    Main view and HTMX handler for Comunidad Telemática.
+    - Full request (request.htmx is False): Renders 'dashboard/community.html'.
+    - HTMX request (request.htmx is True): Renders 'dashboard/partials/community_list.html'.
+    - Supports generation filtering via route kwarg `generation` or query param `?generation=...`.
+    - Supports search query via `?q=...` or `?search=...` (name, current_role, bio).
+    """
+    # 1. Resolve generation filter
+    gen_param = generation if generation is not None else (request.GET.get('generation') or request.GET.get('gen'))
+    selected_generation = _parse_generation_param(gen_param)
+
+    # 2. Resolve search query
+    search_query = (request.GET.get('q') or request.GET.get('search') or '').strip()
+
+    # 3. Build queryset with model ordering ('-generation', 'name', 'id')
+    members = CommunityMember.objects.all()
+
+    if selected_generation is not None:
+        members = members.filter(generation=selected_generation)
+
+    if search_query:
+        members = members.filter(
+            Q(name__icontains=search_query) |
+            Q(current_role__icontains=search_query) |
+            Q(bio__icontains=search_query)
+        )
+
+    # 4. Available generations for filter pills/dropdown
+    generations = CommunityMember.objects.values_list('generation', flat=True).distinct().order_by('-generation')
+
+    # 5. Build context
+    context = {
+        'members': members,
+        'generations': generations,
+        'selected_generation': selected_generation,
+        'active_generation': selected_generation,
+        'search_query': search_query,
+        'total_count': members.count(),
+    }
+
+    # 6. HTMX detection
+    is_htmx = (
+        bool(getattr(request, 'htmx', False))
+        or request.headers.get('HX-Request') == 'true'
+        or request.GET.get('partial') in ('1', 'true', 'True')
+    )
+
+    if is_htmx:
+        return render(request, 'dashboard/partials/community_list.html', context)
+    return render(request, 'dashboard/community.html', context)
+
+
+def community_list_view(request, generation=None):
+    """Explicit endpoint that always renders the partial community_list.html."""
+    gen_param = generation if generation is not None else (request.GET.get('generation') or request.GET.get('gen'))
+    selected_generation = _parse_generation_param(gen_param)
+    search_query = (request.GET.get('q') or request.GET.get('search') or '').strip()
+
+    members = CommunityMember.objects.all()
+    if selected_generation is not None:
+        members = members.filter(generation=selected_generation)
+
+    if search_query:
+        members = members.filter(
+            Q(name__icontains=search_query) |
+            Q(current_role__icontains=search_query) |
+            Q(bio__icontains=search_query)
+        )
+
+    generations = CommunityMember.objects.values_list('generation', flat=True).distinct().order_by('-generation')
+
+    context = {
+        'members': members,
+        'generations': generations,
+        'selected_generation': selected_generation,
+        'active_generation': selected_generation,
+        'search_query': search_query,
+        'total_count': members.count(),
+    }
+    return render(request, 'dashboard/partials/community_list.html', context)
+
 
 
 LOWER_PIN_BOUND = 100000

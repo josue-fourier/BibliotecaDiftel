@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Comunidad Telemática - Biblioteca Diftel{% endblock %}
+
+{% block content %}
+<!-- Encabezado Principal -->
+<div class="mb-8 text-center">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+        <span>Red de Egresados & Estudiantes</span>
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary mb-4 tracking-tight">
+        Comunidad Telemática
+    </h1>
+    <p class="text-base sm:text-lg text-neutral/80 max-w-2xl mx-auto leading-relaxed">
+        Directorio de exalumnos, estudiantes y profesionales de Ingeniería Civil Telemática UTFSM. Explora perfiles, trayectorias profesionales y redes de contacto.
+    </p>
+</div>
+
+<!-- Controles de Búsqueda y Filtros -->
+<div class="max-w-4xl mx-auto mb-8 space-y-4">
+    <!-- Barra de Búsqueda con Debounce HTMX -->
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div class="relative w-full sm:max-w-md">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-neutral/40">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <input type="search"
+                   id="community-search-input"
+                   name="q"
+                   value="{{ search_query }}"
+                   placeholder="Buscar por nombre, cargo o biografía..."
+                   aria-label="Buscar en la comunidad"
+                   class="input input-bordered input-primary w-full pl-10 pr-10 text-sm focus:ring-2 focus:ring-primary/20 shadow-xs"
+                   hx-get="{% url 'community' %}"
+                   hx-target="#community-container"
+                   hx-swap="innerHTML"
+                   hx-trigger="keyup changed delay:300ms, search"
+                   hx-include="#filter-generation-input"
+                   hx-indicator="#loading-indicator"
+                   hx-push-url="true"
+                   autocomplete="off" />
+            {% if search_query %}
+            <button type="button"
+                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral/40 hover:text-neutral"
+                    title="Borrar búsqueda"
+                    onclick="const input = document.getElementById('community-search-input'); input.value=''; htmx.trigger(input, 'search');">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            {% endif %}
+        </div>
+
+        <!-- Selector Dropdown para Pantallas Móviles -->
+        <div class="sm:hidden w-full">
+            <select id="generation-select"
+                    name="generation"
+                    aria-label="Filtrar por generación"
+                    class="select select-bordered select-primary w-full text-sm shadow-xs"
+                    hx-get="{% url 'community' %}"
+                    hx-target="#community-container"
+                    hx-swap="innerHTML"
+                    hx-include="#community-search-input"
+                    hx-indicator="#loading-indicator"
+                    hx-push-url="true"
+                    onchange="document.getElementById('filter-generation-input').value = this.value;">
+                <option value="" {% if not selected_generation %}selected{% endif %}>Todas las generaciones</option>
+                {% for g in generations %}
+                <option value="{{ g }}" {% if selected_generation == g %}selected{% endif %}>Generación {{ g }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Selector de Generación (Pills para Pantallas sm y Superiores) -->
+    <div class="hidden sm:flex justify-center flex-wrap items-center gap-2" role="group" aria-label="Filtro por generación de egreso">
+        <!-- Input oculto para sincronizar generación activa con el debounce de búsqueda -->
+        <input type="hidden" id="filter-generation-input" name="generation" value="{{ selected_generation|default:'' }}">
+
+        <!-- Botón 'Todas' -->
+        <button type="button"
+                class="btn btn-sm btn-generation {% if not selected_generation %}btn-primary text-white{% else %}btn-outline btn-primary{% endif %} shadow-xs hover:shadow-md transition-all duration-200"
+                hx-get="{% url 'community' %}"
+                hx-target="#community-container"
+                hx-swap="innerHTML"
+                hx-include="#community-search-input"
+                hx-indicator="#loading-indicator"
+                hx-push-url="true"
+                onclick="document.getElementById('filter-generation-input').value=''; if(document.getElementById('generation-select')) document.getElementById('generation-select').value=''; document.querySelectorAll('.btn-generation').forEach(b => { b.classList.remove('btn-primary', 'text-white'); b.classList.add('btn-outline'); }); this.classList.remove('btn-outline'); this.classList.add('btn-primary', 'text-white');">
+            Todas
+        </button>
+
+        <!-- Opciones individuales por generación -->
+        {% for g in generations %}
+        <button type="button"
+                class="btn btn-sm btn-generation {% if selected_generation == g %}btn-primary text-white{% else %}btn-outline btn-primary{% endif %} shadow-xs hover:shadow-md transition-all duration-200"
+                hx-get="{% url 'community' %}?generation={{ g }}"
+                hx-target="#community-container"
+                hx-swap="innerHTML"
+                hx-include="#community-search-input"
+                hx-indicator="#loading-indicator"
+                hx-push-url="true"
+                onclick="document.getElementById('filter-generation-input').value='{{ g }}'; if(document.getElementById('generation-select')) document.getElementById('generation-select').value='{{ g }}'; document.querySelectorAll('.btn-generation').forEach(b => { b.classList.remove('btn-primary', 'text-white'); b.classList.add('btn-outline'); }); this.classList.remove('btn-outline'); this.classList.add('btn-primary', 'text-white');">
+            Gen {{ g }}
+        </button>
+        {% empty %}
+        <p class="text-neutral/60 italic text-sm">No hay generaciones registradas.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Indicador de Carga HTMX -->
+<div id="loading-indicator" class="htmx-indicator flex justify-center py-10">
+    <div class="flex flex-col items-center gap-2">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+        <span class="text-xs font-medium text-neutral/60">Buscando en la comunidad...</span>
+    </div>
+</div>
+
+<!-- Contenedor Dinámico de Miembros -->
+<div id="community-container" class="transition-opacity duration-300">
+    {% include "dashboard/partials/community_list.html" %}
+</div>
+
+<style>
+    .htmx-indicator {
+        display: none;
+    }
+    .htmx-request .htmx-indicator {
+        display: flex;
+    }
+    .htmx-request.htmx-indicator {
+        display: flex;
+    }
+</style>
+{% endblock %}

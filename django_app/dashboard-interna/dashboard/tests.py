@@ -615,4 +615,312 @@ class InitialProjectViewTests(TestCase):
         self.assertTemplateUsed(response, 'base.html')
 
 
+class CommunityMemberViewTests(TestCase):
+    """
+    Automated integration and UI tests for Milestone 3: Comunidad Telemática.
+    Validates full page view, HTMX partial rendering, search filtering across
+    name, role, and bio, generation filtering, profile picture rendering and
+    graceful DaisyUI avatar placeholders, social links, and empty states.
+    """
+
+    def setUp(self):
+        self.temp_dir = tempfile.mkdtemp()
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            # Member 1: Gen 2018, full profile with picture and all social links
+            self.m2018 = CommunityMember.objects.create(
+                name="Valeria Carrasco",
+                generation=2018,
+                bio="Ingeniera Civil Telemática especializada en redes 5G y cloud computing.",
+                current_role="Senior Network Architect en Telco Corp",
+                linkedin_url="https://linkedin.com/in/valeriacarrasco",
+                github_url="https://github.com/valeriacarrasco",
+                email="valeria.carrasco@alumnos.usm.cl",
+                profile_picture=self._create_dummy_image("valeria.png")
+            )
+            # Member 2: Gen 2020, role, LinkedIn, email, no GitHub, no picture
+            self.m2020_andres = CommunityMember.objects.create(
+                name="Andrés Gómez",
+                generation=2020,
+                bio="Investigador en ciberseguridad y criptografía aplicada.",
+                current_role="Security Consultant en CyberSec",
+                linkedin_url="https://linkedin.com/in/andresgomez",
+                github_url="",
+                email="andres.gomez@usm.cl"
+            )
+            # Member 3: Gen 2020, GitHub only, no role, no picture
+            self.m2020_beatriz = CommunityMember.objects.create(
+                name="Beatriz Morales",
+                generation=2020,
+                bio="Desarrolladora Fullstack y entusiasta de microservicios e IoT.",
+                current_role="",
+                linkedin_url="",
+                github_url="https://github.com/bmorales",
+                email=""
+            )
+            # Member 4: Gen 2022, student, email only
+            self.m2022 = CommunityMember.objects.create(
+                name="Carlos Navarrete",
+                generation=2022,
+                bio="Estudiante de último año enfocado en redes definidas por software SDN.",
+                current_role="Estudiante / Tesista",
+                linkedin_url="",
+                github_url="",
+                email="carlos.navarrete@alumnos.usm.cl"
+            )
+
+    def tearDown(self):
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def _create_dummy_image(self, filename="dummy.png"):
+        png_data = (
+            b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01'
+            b'\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15c4\x00'
+            b'\x00\x00\rIDATx\x9cc`\x00\x00\x00\x02\x00\x01H\xaf'
+            b'\xa4q\x00\x00\x00\x00IEND\xaeB`\x82'
+        )
+        return SimpleUploadedFile(filename, png_data, content_type="image/png")
+
+    # --------------------------------------------------------------------------
+    # 1. Full Page View Tests
+    # --------------------------------------------------------------------------
+    def test_community_full_page_view_status_and_templates(self):
+        """GET /comunidad/ returns 200, uses community.html, extends base.html, and renders partial."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community'))
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'dashboard/community.html')
+            self.assertTemplateUsed(response, 'base.html')
+            self.assertTemplateUsed(response, 'dashboard/partials/community_list.html')
+
+            self.assertContains(response, '<!DOCTYPE html>')
+            self.assertContains(response, 'Biblioteca Diftel Admin')
+            self.assertContains(response, 'Comunidad Telemática')
+
+    def test_community_full_page_view_context_keys_and_ordering(self):
+        """Context contains expected keys; members ordered by -generation, name."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community'))
+            self.assertEqual(response.status_code, 200)
+
+            for key in ['members', 'generations', 'selected_generation', 'active_generation', 'search_query', 'total_count']:
+                self.assertIn(key, response.context)
+
+            members_list = list(response.context['members'])
+            self.assertEqual(len(members_list), 4)
+            # -generation, then name: m2022, m2020_andres, m2020_beatriz, m2018
+            self.assertEqual(members_list, [self.m2022, self.m2020_andres, self.m2020_beatriz, self.m2018])
+
+            generations_list = list(response.context['generations'])
+            self.assertEqual(generations_list, [2022, 2020, 2018])
+            self.assertIsNone(response.context['selected_generation'])
+
+    # --------------------------------------------------------------------------
+    # 2. HTMX Partial Request Tests
+    # --------------------------------------------------------------------------
+    def test_community_htmx_partial_request(self):
+        """HTMX request returns 200, uses community_list.html partial, and omits base shell."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community'), HTTP_HX_REQUEST='true')
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'dashboard/partials/community_list.html')
+            self.assertTemplateNotUsed(response, 'base.html')
+            self.assertTemplateNotUsed(response, 'dashboard/community.html')
+
+            self.assertNotContains(response, '<!DOCTYPE html>')
+            self.assertNotContains(response, '<nav class="navbar')
+            self.assertContains(response, 'Valeria Carrasco')
+
+    def test_community_list_view_direct_endpoint(self):
+        """GET /comunidad/partial/ directly renders the partial without base shell."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community_list'))
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'dashboard/partials/community_list.html')
+            self.assertTemplateNotUsed(response, 'base.html')
+
+    def test_community_search_endpoint(self):
+        """GET /comunidad/search/ renders the partial directly."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community_search'))
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'dashboard/partials/community_list.html')
+
+    def test_community_list_by_generation_endpoint(self):
+        """GET /comunidad/partial/generacion/<generation>/ directly renders partial for that generation."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community_list_by_generation', kwargs={'generation': 2020}))
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'dashboard/partials/community_list.html')
+            self.assertTemplateNotUsed(response, 'base.html')
+            members = list(response.context['members'])
+            self.assertEqual(len(members), 2)
+            self.assertEqual(members, [self.m2020_andres, self.m2020_beatriz])
+
+    # --------------------------------------------------------------------------
+    # 3. Search Filtering Tests
+    # --------------------------------------------------------------------------
+    def test_community_search_by_name(self):
+        """Searching by name (?q=Valeria) matches Valeria Carrasco."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?q=Valeria")
+            self.assertEqual(response.status_code, 200)
+            members = list(response.context['members'])
+            self.assertEqual(len(members), 1)
+            self.assertEqual(members[0], self.m2018)
+            self.assertContains(response, 'Valeria Carrasco')
+            self.assertNotContains(response, 'Andrés Gómez')
+
+    def test_community_search_by_current_role(self):
+        """Searching by role (?q=Consultant) matches Andrés Gómez."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?q=Consultant")
+            self.assertEqual(response.status_code, 200)
+            members = list(response.context['members'])
+            self.assertEqual(len(members), 1)
+            self.assertEqual(members[0], self.m2020_andres)
+
+    def test_community_search_by_bio(self):
+        """Searching by bio (?q=microservicios) matches Beatriz Morales."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?q=microservicios")
+            self.assertEqual(response.status_code, 200)
+            members = list(response.context['members'])
+            self.assertEqual(len(members), 1)
+            self.assertEqual(members[0], self.m2020_beatriz)
+
+    def test_community_search_case_insensitive_and_alias(self):
+        """Search is case-insensitive and ?search= works as an alias for ?q=."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            res_lower = self.client.get(f"{reverse('community')}?q=valeria")
+            self.assertEqual(len(list(res_lower.context['members'])), 1)
+
+            res_alias = self.client.get(f"{reverse('community')}?search=Valeria")
+            self.assertEqual(len(list(res_alias.context['members'])), 1)
+
+    # --------------------------------------------------------------------------
+    # 4. Generation Filtering Tests
+    # --------------------------------------------------------------------------
+    def test_community_generation_filter_via_query_param(self):
+        """GET /comunidad/?generation=2020 returns only members from generation 2020."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?generation=2020")
+            self.assertEqual(response.status_code, 200)
+            members = list(response.context['members'])
+            self.assertEqual(len(members), 2)
+            self.assertEqual(members, [self.m2020_andres, self.m2020_beatriz])
+
+    def test_community_generation_filter_via_path_param(self):
+        """GET /comunidad/generacion/2018/ returns only members from generation 2018."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community_by_generation', kwargs={'generation': 2018}))
+            self.assertEqual(response.status_code, 200)
+            members = list(response.context['members'])
+            self.assertEqual(len(members), 1)
+            self.assertEqual(members[0], self.m2018)
+
+    def test_community_combined_search_and_generation_filter(self):
+        """Filtering by both generation and search query applies both filters conjunctively."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            # In gen 2020, searching for 'Andrés' returns 1 member
+            res1 = self.client.get(f"{reverse('community')}?generation=2020&q=Andrés")
+            self.assertEqual(len(list(res1.context['members'])), 1)
+            self.assertEqual(list(res1.context['members'])[0], self.m2020_andres)
+
+            # In gen 2022, searching for 'Andrés' returns 0 members
+            res2 = self.client.get(f"{reverse('community')}?generation=2022&q=Andrés")
+            self.assertEqual(len(list(res2.context['members'])), 0)
+
+    def test_community_invalid_generation_resilience(self):
+        """Non-numeric or malformed generation parameters fall back gracefully without 500 error."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            for bad_gen in ['invalid', '-2020', 'all', 'todas', 'null', '%20']:
+                response = self.client.get(f"{reverse('community')}?generation={bad_gen}")
+                self.assertEqual(response.status_code, 200)
+                self.assertIsNone(response.context['selected_generation'])
+                self.assertEqual(len(list(response.context['members'])), 4)
+
+    # --------------------------------------------------------------------------
+    # 5. Profile Picture & Fallback Avatar Rendering
+    # --------------------------------------------------------------------------
+    def test_community_member_profile_picture_rendered(self):
+        """Member with profile_picture renders <img> tag pointing to /media/community/profile_pics/."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community'))
+            self.assertEqual(response.status_code, 200)
+            pic_url = self.m2018.profile_picture.url
+            self.assertTrue(pic_url.startswith('/media/community/profile_pics/'))
+            self.assertContains(response, f'src="{pic_url}"')
+            self.assertContains(response, f'alt="Fotografía de {self.m2018.name}"')
+
+    def test_community_member_without_profile_picture_renders_placeholder(self):
+        """Member without profile_picture renders DaisyUI avatar placeholder with initial letter."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?q=Andr%C3%A9s")
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, 'avatar placeholder')
+            self.assertContains(response, '<span>A</span>')
+
+    # --------------------------------------------------------------------------
+    # 6. Social Links Rendering
+    # --------------------------------------------------------------------------
+    def test_community_member_social_links_rendered_when_present(self):
+        """Social links (LinkedIn, GitHub, Email) are rendered when set on member."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?q=Valeria")
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, 'href="https://linkedin.com/in/valeriacarrasco"')
+            self.assertContains(response, 'href="https://github.com/valeriacarrasco"')
+            self.assertContains(response, 'href="mailto:valeria.carrasco@alumnos.usm.cl"')
+            self.assertContains(response, 'target="_blank"')
+            self.assertContains(response, 'rel="noopener noreferrer"')
+
+    def test_community_member_social_links_omitted_when_blank(self):
+        """When social fields are blank, anchor tags are not rendered for those fields."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            # Beatriz has GitHub only
+            response = self.client.get(f"{reverse('community')}?q=Beatriz")
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, 'href="https://github.com/bmorales"')
+            self.assertNotContains(response, 'href="https://linkedin.com')
+            self.assertNotContains(response, 'href="mailto:')
+
+    # --------------------------------------------------------------------------
+    # 7. Empty States & Reset
+    # --------------------------------------------------------------------------
+    def test_community_empty_state_when_search_yields_no_results(self):
+        """When search query matches no members, empty state with reset button is rendered."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(f"{reverse('community')}?q=NonExistentPersonXYZ", HTTP_HX_REQUEST='true')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(list(response.context['members'])), 0)
+            self.assertContains(response, 'No se encontraron miembros')
+            self.assertContains(response, 'NonExistentPersonXYZ')
+            self.assertContains(response, 'Restablecer filtros y ver todos')
+
+    def test_community_empty_state_when_database_is_empty(self):
+        """When database is completely empty of members, friendly global empty state is shown."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            CommunityMember.objects.all().delete()
+            response = self.client.get(reverse('community'))
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(list(response.context['members'])), 0)
+            self.assertContains(response, 'Aún no hay miembros registrados en el directorio de la comunidad')
+
+    # --------------------------------------------------------------------------
+    # 8. Responsive Layout & DaisyUI Classes
+    # --------------------------------------------------------------------------
+    def test_community_responsive_grid_and_card_classes(self):
+        """HTML contains required mobile-first responsive grid and DaisyUI classes."""
+        with override_settings(MEDIA_ROOT=self.temp_dir, MEDIA_URL='/media/'):
+            response = self.client.get(reverse('community'), HTTP_HX_REQUEST='true')
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, 'grid-cols-1')
+            self.assertContains(response, 'md:grid-cols-2')
+            self.assertContains(response, 'lg:grid-cols-3')
+            self.assertContains(response, 'gap-6')
+            self.assertContains(response, 'card')
+            self.assertContains(response, 'badge-primary')
+
+
+
 

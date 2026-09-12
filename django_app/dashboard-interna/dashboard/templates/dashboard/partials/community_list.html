@@ -1,0 +1,141 @@
+{% if members %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
+    {% for member in members %}
+    <div class="card bg-base-100 shadow-xl border border-base-200 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden">
+        
+        <!-- Encabezado de Tarjeta: Avatar, Nombre, Generación y Cargo -->
+        <div class="p-6 pb-2 flex items-start gap-4">
+            <!-- Avatar: Foto de Perfil o Placeholder Elegante con Inicial -->
+            {% if member.profile_picture %}
+            <div class="avatar shrink-0">
+                <div class="w-16 h-16 rounded-full ring ring-primary/30 ring-offset-base-100 ring-offset-2 overflow-hidden shadow-sm">
+                    <img src="{{ member.profile_picture.url }}" 
+                         alt="Fotografía de {{ member.name }}" 
+                         class="w-full h-full object-cover" 
+                         loading="lazy" />
+                </div>
+            </div>
+            {% else %}
+            <div class="avatar placeholder shrink-0">
+                <div class="bg-gradient-to-br from-primary/15 to-secondary/20 text-primary border border-primary/20 rounded-full w-16 h-16 flex items-center justify-center font-bold text-xl ring ring-primary/20 ring-offset-base-100 ring-offset-2 shadow-xs select-none">
+                    <span>{{ member.name|slice:":1"|upper }}</span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Información Principal -->
+            <div class="flex-grow min-w-0">
+                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                    <h3 class="card-title text-neutral text-lg font-bold truncate leading-tight" title="{{ member.name }}">
+                        {{ member.name }}
+                    </h3>
+                    <span class="badge badge-primary font-semibold text-white shrink-0 text-xs shadow-xs">
+                        Gen {{ member.generation }}
+                    </span>
+                </div>
+
+                <!-- Cargo o Rol Actual (si existe) -->
+                {% if member.current_role %}
+                <div class="flex items-center gap-1.5 text-xs text-neutral/70 font-medium truncate mt-0.5" title="{{ member.current_role }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-secondary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span class="truncate">{{ member.current_role }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Biografía Corta -->
+        <div class="card-body px-6 py-2 flex flex-col flex-grow">
+            <p class="text-sm text-neutral/80 leading-relaxed line-clamp-4 whitespace-pre-line flex-grow">
+                {{ member.bio }}
+            </p>
+        </div>
+
+        <!-- Barra de Contacto y Enlaces Sociales (solo si existe al menos uno) -->
+        {% if member.linkedin_url or member.github_url or member.email %}
+        <div class="card-actions justify-end items-center px-6 py-3 border-t border-base-200 bg-base-200/20 gap-1 mt-auto">
+            <span class="text-[11px] font-semibold text-neutral/50 uppercase tracking-wider mr-auto">Contacto</span>
+
+            <!-- LinkedIn -->
+            {% if member.linkedin_url %}
+            <a href="{{ member.linkedin_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="btn btn-circle btn-sm btn-ghost hover:bg-[#0A66C2]/10 text-[#0A66C2] transition-colors"
+               title="LinkedIn de {{ member.name }}"
+               aria-label="Perfil de LinkedIn de {{ member.name }}">
+                <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.88a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28z"/>
+                </svg>
+            </a>
+            {% endif %}
+
+            <!-- GitHub -->
+            {% if member.github_url %}
+            <a href="{{ member.github_url }}" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               class="btn btn-circle btn-sm btn-ghost hover:bg-neutral/10 text-neutral transition-colors"
+               title="GitHub de {{ member.name }}"
+               aria-label="Perfil de GitHub de {{ member.name }}">
+                <svg class="h-4 w-4 fill-current" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                </svg>
+            </a>
+            {% endif %}
+
+            <!-- Email -->
+            {% if member.email %}
+            <a href="mailto:{{ member.email }}" 
+               class="btn btn-circle btn-sm btn-ghost hover:bg-primary/10 text-primary transition-colors"
+               title="Enviar correo a {{ member.name }}"
+               aria-label="Correo de {{ member.name }}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<!-- Estado Vacío (Empty State) -->
+<div class="col-span-full text-center py-16 animate-fade-in bg-base-200/50 border border-dashed border-base-300 rounded-2xl p-8 my-4">
+    <div class="inline-flex p-4 rounded-full bg-primary/10 text-primary mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+    </div>
+    <h3 class="text-2xl font-bold text-neutral">No se encontraron miembros</h3>
+    <p class="text-neutral/70 mt-2 max-w-md mx-auto text-sm">
+        {% if search_query and selected_generation %}
+            No se encontraron miembros que coincidan con "<span class="font-semibold text-neutral">{{ search_query }}</span>" en la generación <span class="font-semibold text-neutral">{{ selected_generation }}</span>.
+        {% elif search_query %}
+            No se encontraron miembros que coincidan con "<span class="font-semibold text-neutral">{{ search_query }}</span>".
+        {% elif selected_generation %}
+            No hay egresados o estudiantes registrados para la generación <span class="font-semibold text-neutral">{{ selected_generation }}</span>.
+        {% else %}
+            Aún no hay miembros registrados en el directorio de la comunidad.
+        {% endif %}
+    </p>
+
+    <!-- Botón de Limpiar / Restablecer Filtros -->
+    {% if search_query or selected_generation %}
+    <button class="btn btn-sm btn-outline btn-primary mt-5 gap-2"
+            hx-get="{% url 'community' %}"
+            hx-target="#community-container"
+            hx-swap="innerHTML"
+            hx-push-url="true"
+            onclick="document.getElementById('community-search-input').value=''; document.getElementById('filter-generation-input').value=''; if(document.getElementById('generation-select')) document.getElementById('generation-select').value=''; document.querySelectorAll('.btn-generation').forEach(b => { b.classList.remove('btn-primary', 'text-white'); b.classList.add('btn-outline'); }); document.querySelector('.btn-generation')?.classList.add('btn-primary', 'text-white');">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>Restablecer filtros y ver todos</span>
+    </button>
+    {% endif %}
+</div>
+{% endif %}

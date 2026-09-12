@@ -34,6 +34,11 @@ urlpatterns = [
     path("talleres/year/<int:year>/", views.workshops_view, name="workshops_by_year"),
     path("talleres/partial/", views.workshops_list_view, name="workshops_list"),
     path("talleres/partial/year/<int:year>/", views.workshops_list_view, name="workshops_list_by_year"),
+    path("comunidad/", views.community_view, name="community"),
+    path("comunidad/generacion/<int:generation>/", views.community_view, name="community_by_generation"),
+    path("comunidad/search/", views.community_list_view, name="community_search"),
+    path("comunidad/partial/", views.community_list_view, name="community_list"),
+    path("comunidad/partial/generacion/<int:generation>/", views.community_list_view, name="community_list_by_generation"),
 ]
 
 if settings.DEBUG:
