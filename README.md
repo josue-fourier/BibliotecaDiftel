@@ -1,55 +1,73 @@
 # Biblioteca Diftel SJ / Telemática Hub
 
-Un repositorio autogestionado, altamente optimizado y seguro para los estudiantes de Ingeniería Civil Telemática (Campus San Joaquín). Este proyecto separa la distribución pública de contenido estático de un pipeline de subida aislado y seguro, garantizando velocidad extrema y protección contra malware.
+Un repositorio autogestionado, altamente optimizado y seguro para los estudiantes de Ingeniería Civil Telemática (Campus San Joaquín). Este proyecto separa la distribución de contenido y la base de conocimiento colaborativa de un pipeline de subida aislado y seguro, garantizando velocidad y protección contra malware.
 
 ## 🚀 Arquitectura General
 
 El proyecto utiliza una arquitectura de microservicios con **Docker Compose**:
-- **Nginx**: Actúa como proxy inverso y servidor de altísimo rendimiento para archivos estáticos, la landing page, el sitio compilado de Quartz y la descarga de recursos pesados.
-- **Django & PostgreSQL**: Operan gestionando la API del "Buzón Seguro", validando la identidad de los estudiantes mediante correos institucionales (PIN temporal OTP) y recibiendo los archivos. También proveen un endpoint dinámico con caché en RAM (latencia cero) para listar los recursos disponibles.
+
+- **Nginx**: Actúa como proxy inverso y servidor web para la landing page, sirviendo además los archivos estáticos y gestionando las rutas iniciales.
+- **Django & PostgreSQL**: Operan gestionando la API del "Buzón Seguro", validando la identidad de los estudiantes mediante correos institucionales (PIN temporal OTP) y recibiendo los archivos. Alimentan vistas importantes de la página.
+- **Docmost & Redis**: Plataforma de Wiki/Base de Conocimientos colaborativa, reemplazando antiguos generadores estáticos, apoyado por Redis para caché y tareas en segundo plano.
+- **Filebrowser Quantum**: Interfaz moderna para la exploración y gestión web de los archivos en el servidor (`/srv/data/recursos` y archivos seguros).
 - **ClamAV & Watcher**: Un motor antivirus oficial y un microservicio en Python que monitorea en tiempo real las subidas temporales al buzón, escaneando, aislando amenazas y aprobando archivos limpios.
-- **Quartz v4**: Generador de sitios estáticos especializado en tomar *Vaults* (bóvedas) de Obsidian y publicarlas de forma interactiva e interconectada en la web.
+- **Cloudflared**: Túnel seguro hacia la web.
 
-## 📂 Estructura de Directorios
+### Diagrama de Infraestructura
 
-* **`data/`**: Volúmenes montados y servidos directamente por Nginx para máxima velocidad.
-  * `landing/`: Frontend principal (Página de Inicio y formulario del Buzón).
-  * `quartz_public/`: Código HTML compilado generado por Quartz (despachado en `/quartz/`).
-  * `recursos/`: Carpeta de almacenamiento masivo para archivos pesados (PDFs, ZIPs) servidos rápidamente vía `sendfile` de Nginx.
-  * `buzon/`: Archivos en tránsito clasificados de forma automática en `tmp/`, `safe/` (limpios) y `quarantine/` (amenazas virales).
-* **`quartz_app/`**: Proyecto base de Quartz y bóveda de Obsidian (ubicada en `quartz_app/content/`).
-* **`django_app/`**: Código fuente de la API backend escrita en Django.
-* **`nginx/`**: Configuración de enrutamiento web y reglas de seguridad para Nginx.
-* **`clamav_watcher/`**: Microservicio en Python que sirve de puente entre Django y ClamAV.
+```mermaid
+flowchart TD
+    Internet((Internet)) --> Cloudflare[Cloudflare Tunnel]
+    Cloudflare --> Nginx[Nginx Proxy]
+    
+    Nginx -->|Rutas API/Buzón| Django[Django Backend]
+    Nginx -->|Rutas Wiki| Docmost[Docmost]
+    Nginx -->|Gestor de Archivos| FB[Filebrowser Quantum]
+    
+    Django <--> DB[(PostgreSQL)]
+    Docmost <--> DB
+    Docmost <--> Redis[(Redis)]
+    
+    Django -->|Guarda archivos temporales| Buzon[(Volumen: Buzón)]
+    Buzon --> Watcher[ClamAV Watcher]
+    Watcher <--> ClamAV[ClamAV Daemon]
+    Watcher -->|Mueve limpios a safe/| FB
+```
+
+## 🗺️ Vistas de la Página Principal
+
+- **Proyectos**: Catálogo de proyectos estudiantiles y de la carrera.
+- **Talleres Telemáticos**: Información y recursos sobre talleres impartidos en la carrera.
+- **Comunidad Telemática**: Espacio centralizado para links, redes y organización de la comunidad.
+- **Buzón Seguro**: Herramienta de subida autenticada.
 
 ## 🛠️ Flujo de Trabajo y Contribución
 
-La comunidad puede aportar al repositorio a través de dos flujos distintos:
+Existen dos maneras principales de involucrarse con el Telemática Hub:
 
-### Opción A: Aportar Material (El Buzón Seguro)
-1. **Subida Autenticada:** Los estudiantes suben su material en la vista `/buzon/`, validando su identidad con su correo institucional.
-2. **Escaneo Antivirus:** Django guarda el archivo temporalmente. El servicio `telematica-watcher` lo detecta y lo escanea a través de ClamAV.
-3. **Clasificación Automática:** Si el archivo está limpio, se aprueba automáticamente y luego los administradores lo mueven a `data/recursos/`.
+### 1. Aportar Material (El Buzón Seguro)
+Cualquier estudiante puede aportar apuntes y recursos valiosos:
+1. **Subida Autenticada:** Sube tu material en la vista del Buzón, validando tu identidad con tu correo institucional.
+2. **Escaneo Antivirus Automático:** Django recibe el archivo. El servicio `telematica-watcher` lo detecta y lo escanea en tiempo real a través de ClamAV.
+3. **Aprobación:** Si el archivo está limpio, se aprueba y queda disponible en Filebrowser para ser enlazado en Docmost.
 
-### Opción B: Escribir y Categorizar Apuntes (Vía GitHub + Obsidian)
-1. **Explorador Dinámico:** En Quartz, la vista de `[[Archivos_Pesados]]` consume la API de Django para mostrar en tiempo real los recursos aprobados y listos para ser referenciados, proveyendo un botón para "Copiar Markdown".
-2. **Edición Visual (Obsidian):** Clonas el repositorio y abres la carpeta local `quartz_app/content/` como tu Bóveda en **Obsidian**. Allí organizas tus archivos, enlazas ramos en las mallas y pegas los links hacia los archivos pesados.
-3. **Publicación:** Subes tus cambios a GitHub y abres un Pull Request. El administrador revisa y ejecuta el script de despliegue.
+### 2. Unirse al Equipo de Mantención
+Para los que desean contribuir al código fuente y administrar el Hub:
+1. **Desarrollo Local:** Necesitas Docker y Docker Compose. Clona este repositorio y crea tu archivo `.env` basado en `env.example`.
+2. **Infraestructura Completa:** Levanta los contenedores con `docker compose up -d --build`.
+3. **Pull Requests:** Trabaja en nuevas vistas de Django, mejoras en la UI o automatizaciones y abre un Pull Request en GitHub. El administrador del equipo lo revisará e integrará.
 
-## ⚙️ Despliegue y Configuración (Para Administradores)
+## ⚠️ Deuda Técnica Existente
 
-1. **Requisitos:** Docker, Docker Compose y dependencias Node.js locales (npm) para compilar Quartz.
-2. Clona el repositorio y configura tus variables de entorno para el backend y SMTP:
-   ```bash
-   cp env.example .env
-   # Asegúrate de rellenar credenciales, configuraciones de correo y dominios.
-   ```
-3. Construye y levanta toda la infraestructura de contenedores:
+Actualmente el proyecto cuenta con ciertos puntos de mejora técnica (Tech Debt) a considerar para futuros PRs:
+- **Falta de Tests Automatizados:** Ausencia de pruebas unitarias robustas para la validación OTP y el Watcher.
+- **Refactorizaciones Pendientes:** Algunas vistas en Django y componentes del frontend acoplados podrían requerir modularización.
+
+## ⚙️ Despliegue (Para Administradores)
+
+1. Clona el repositorio y configura `.env`.
+2. Levanta la infraestructura:
    ```bash
    docker compose up -d --build
    ```
-   *(Nota: ClamAV puede tardar unos minutos en iniciar por completo la primera vez, ya que debe descargar su pesada base de datos de firmas virales actualizadas).*
-4. **Despliegue de Apuntes:** Ejecuta el script `./deploy.sh` en la raíz de tu terminal. Este script hace todo por ti:
-   - Compila la bóveda de Obsidian en HTML interactivo.
-   - Mueve y actualiza automáticamente los archivos públicos en Nginx.
-   - Realiza un *commit* y *push* para respaldar tu trabajo.
+   *(Nota: ClamAV puede tardar unos minutos en iniciar por completo la primera vez).*
