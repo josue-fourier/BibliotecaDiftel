@@ -43,19 +43,11 @@ flowchart TD
 
 ## 🛠️ Flujo de Trabajo y Contribución
 
-Existen dos maneras principales de involucrarse con el Telemática Hub:
-
-### 1. Aportar Material (El Buzón Seguro)
+###  Aportar Material (El Buzón Seguro)
 Cualquier estudiante puede aportar apuntes y recursos valiosos:
 1. **Subida Autenticada:** Sube tu material en la vista del Buzón, validando tu identidad con tu correo institucional.
 2. **Escaneo Antivirus Automático:** Django recibe el archivo. El servicio `telematica-watcher` lo detecta y lo escanea en tiempo real a través de ClamAV.
 3. **Aprobación:** Si el archivo está limpio, se aprueba y queda disponible en Filebrowser para ser enlazado en Docmost.
-
-### 2. Unirse al Equipo de Mantención
-Para los que desean contribuir al código fuente y administrar el Hub:
-1. **Desarrollo Local:** Necesitas Docker y Docker Compose. Clona este repositorio y crea tu archivo `.env` basado en `env.example`.
-2. **Infraestructura Completa:** Levanta los contenedores con `docker compose up -d --build`.
-3. **Pull Requests:** Trabaja en nuevas vistas de Django, mejoras en la UI o automatizaciones y abre un Pull Request en GitHub. El administrador del equipo lo revisará e integrará.
 
 ## ⚠️ Deuda Técnica Existente
 
